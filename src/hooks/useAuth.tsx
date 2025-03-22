@@ -1,7 +1,9 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User as SupabaseUser } from '@supabase/supabase-js';
 import { User } from '../lib/types';
 import { toast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AuthContextType {
   user: User | null;
@@ -18,35 +20,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for user in localStorage (this is a mock, in a real app we'd verify with the backend)
-    const storedUser = localStorage.getItem('yepai_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    // Set up the auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session && session.user) {
+          const userData: User = {
+            id: session.user.id,
+            email: session.user.email || '',
+            name: session.user.user_metadata.name || session.user.email?.split('@')[0] || '',
+          };
+          setUser(userData);
+        } else {
+          setUser(null);
+        }
+        setIsLoading(false);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session && session.user) {
+        const userData: User = {
+          id: session.user.id,
+          email: session.user.email || '',
+          name: session.user.user_metadata.name || session.user.email?.split('@')[0] || '',
+        };
+        setUser(userData);
+      }
+      setIsLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      // Mock login - in a real app this would call an API
-      const mockUser: User = {
-        id: 'user-' + Math.random().toString(36).substr(2, 9),
-        email,
-        name: email.split('@')[0]
-      };
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       
-      // Store user in localStorage
-      localStorage.setItem('yepai_user', JSON.stringify(mockUser));
-      setUser(mockUser);
+      if (error) {
+        throw error;
+      }
+      
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in.",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: error.message || "Please check your credentials and try again.",
         variant: "destructive",
       });
       throw error;
@@ -58,24 +83,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (email: string, password: string, name?: string) => {
     try {
       setIsLoading(true);
-      // Mock registration - in a real app this would call an API
-      const mockUser: User = {
-        id: 'user-' + Math.random().toString(36).substr(2, 9),
-        email,
-        name: name || email.split('@')[0]
-      };
+      const { error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+          data: {
+            name: name || email.split('@')[0],
+          }
+        }
+      });
       
-      // Store user in localStorage
-      localStorage.setItem('yepai_user', JSON.stringify(mockUser));
-      setUser(mockUser);
+      if (error) {
+        throw error;
+      }
+      
       toast({
         title: "Account created",
-        description: "Your account has been successfully created.",
+        description: "Your account has been successfully created. Please check your email for verification.",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Registration failed",
-        description: "Please try again with a different email.",
+        description: error.message || "Please try again with a different email.",
         variant: "destructive",
       });
       throw error;
@@ -87,17 +116,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     try {
       setIsLoading(true);
-      // Remove user from localStorage
-      localStorage.removeItem('yepai_user');
-      setUser(null);
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        throw error;
+      }
+      
       toast({
         title: "Logged out",
         description: "You've been successfully logged out.",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Logout failed",
-        description: "Please try again.",
+        description: error.message || "Please try again.",
         variant: "destructive",
       });
       throw error;

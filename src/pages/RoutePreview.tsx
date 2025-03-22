@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Route, ColorBlindnessFilter } from "@/lib/types";
 import { ThumbsUp, ThumbsDown, ArrowLeft, Trash2, Save } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const RoutePreview = () => {
   const navigate = useNavigate();
@@ -42,29 +42,36 @@ const RoutePreview = () => {
   
   const handleFeedback = async (newFeedback: "like" | "dislike") => {
     try {
+      if (!route) return;
+      
       // Toggle feedback if already selected
       const updatedFeedback = feedback === newFeedback ? null : newFeedback;
       
       setFeedback(updatedFeedback);
       
-      if (route) {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Update local route state
-        setRoute({
-          ...route,
-          user_feedback: updatedFeedback,
-        });
-        
-        toast({
-          title: updatedFeedback ? "Feedback saved" : "Feedback removed",
-          description: updatedFeedback 
-            ? "Thank you for providing your feedback!" 
-            : "Your feedback has been removed.",
-        });
+      // Update feedback in the database
+      const { error } = await supabase
+        .from('routes')
+        .update({ user_feedback: updatedFeedback })
+        .eq('id', route.id);
+      
+      if (error) {
+        throw error;
       }
-    } catch (error) {
+      
+      // Update local route state
+      setRoute({
+        ...route,
+        user_feedback: updatedFeedback,
+      });
+      
+      toast({
+        title: updatedFeedback ? "Feedback saved" : "Feedback removed",
+        description: updatedFeedback 
+          ? "Thank you for providing your feedback!" 
+          : "Your feedback has been removed.",
+      });
+    } catch (error: any) {
       console.error("Error updating feedback:", error);
       toast({
         title: "Error",
@@ -76,10 +83,33 @@ const RoutePreview = () => {
   
   const handleDelete = async () => {
     try {
+      if (!route) return;
+      
       setIsLoading(true);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Delete the route from the database
+      const { error: deleteError } = await supabase
+        .from('routes')
+        .delete()
+        .eq('id', route.id);
+      
+      if (deleteError) {
+        throw deleteError;
+      }
+      
+      // If image is stored in Supabase Storage, delete it too
+      if (route.image_url && route.image_url.includes('storage/v1')) {
+        const path = route.image_url.split('/').pop();
+        if (path) {
+          const { error: storageError } = await supabase.storage
+            .from('route_images')
+            .remove([path]);
+          
+          if (storageError) {
+            console.error("Error deleting image:", storageError);
+          }
+        }
+      }
       
       toast({
         title: "Route deleted",
@@ -87,7 +117,7 @@ const RoutePreview = () => {
       });
       
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting route:", error);
       toast({
         title: "Error",
@@ -99,11 +129,13 @@ const RoutePreview = () => {
   };
   
   const handleSave = async () => {
+    // For new routes the data is already saved to the database during upload
+    // This function is just for UX flow now
     try {
       setIsSaving(true);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // No need to do anything here as the route is already saved
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       toast({
         title: "Route saved",
@@ -111,7 +143,7 @@ const RoutePreview = () => {
       });
       
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving route:", error);
       toast({
         title: "Error",

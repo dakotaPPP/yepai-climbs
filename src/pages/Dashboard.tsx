@@ -12,6 +12,7 @@ import { Route, ColorBlindnessFilter } from "@/lib/types";
 import { Plus, Search, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -29,59 +30,23 @@ const Dashboard = () => {
       return;
     }
     
-    // Mock data fetch - in a real app this would call an API
     const fetchRoutes = async () => {
       try {
         setIsLoading(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 800));
         
-        // Mock routes data
-        const mockRoutes: Route[] = [
-          {
-            id: "1",
-            name: "Crimpy Problem",
-            image_url: "/placeholder.svg",
-            hold_color: "red",
-            location: "Boulder Gym East",
-            predicted_grade: "V5",
-            user_feedback: "like",
-            created_at: new Date().toISOString(),
-          },
-          {
-            id: "2",
-            name: "Slopey Challenge",
-            image_url: "/placeholder.svg",
-            hold_color: "blue",
-            location: "Climbing Center",
-            predicted_grade: "V7",
-            user_feedback: null,
-            created_at: new Date(Date.now() - 86400000).toISOString(),
-          },
-          {
-            id: "3",
-            name: null,
-            image_url: "/placeholder.svg",
-            hold_color: "green",
-            location: null,
-            predicted_grade: "V4",
-            user_feedback: "dislike",
-            created_at: new Date(Date.now() - 172800000).toISOString(),
-          },
-          {
-            id: "4",
-            name: "Overhang Crusher",
-            image_url: "/placeholder.svg",
-            hold_color: "yellow",
-            location: "Boulder Zone",
-            predicted_grade: "V6",
-            user_feedback: null,
-            created_at: new Date(Date.now() - 259200000).toISOString(),
-          },
-        ];
+        if (!user) return;
         
-        setRoutes(mockRoutes);
-      } catch (error) {
+        const { data, error } = await supabase
+          .from('routes')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          throw error;
+        }
+        
+        setRoutes(data as Route[]);
+      } catch (error: any) {
         console.error("Error fetching routes:", error);
         toast({
           title: "Error",
@@ -100,8 +65,40 @@ const Dashboard = () => {
   
   const handleDeleteRoute = async (id: string) => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // First fetch the route to get the image URL
+      const { data: routeData, error: fetchError } = await supabase
+        .from('routes')
+        .select('image_url')
+        .eq('id', id)
+        .single();
+      
+      if (fetchError) {
+        throw fetchError;
+      }
+      
+      // Delete the route from the database
+      const { error: deleteError } = await supabase
+        .from('routes')
+        .delete()
+        .eq('id', id);
+      
+      if (deleteError) {
+        throw deleteError;
+      }
+      
+      // If image is stored in Supabase Storage, delete it too
+      if (routeData.image_url && routeData.image_url.includes('storage/v1')) {
+        const path = routeData.image_url.split('/').pop();
+        if (path) {
+          const { error: storageError } = await supabase.storage
+            .from('route_images')
+            .remove([path]);
+          
+          if (storageError) {
+            console.error("Error deleting image:", storageError);
+          }
+        }
+      }
       
       // Update state to remove the deleted route
       setRoutes(routes.filter(route => route.id !== id));
@@ -110,7 +107,7 @@ const Dashboard = () => {
         title: "Route deleted",
         description: "The route has been successfully removed.",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting route:", error);
       toast({
         title: "Error",
@@ -122,8 +119,19 @@ const Dashboard = () => {
   
   const handleFeedback = async (id: string, feedback: "like" | "dislike") => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Find the route and toggle feedback if it's the same
+      const route = routes.find(r => r.id === id);
+      const updatedFeedback = route?.user_feedback === feedback ? null : feedback;
+      
+      // Update database
+      const { error } = await supabase
+        .from('routes')
+        .update({ user_feedback: updatedFeedback })
+        .eq('id', id);
+      
+      if (error) {
+        throw error;
+      }
       
       // Update state with the new feedback
       setRoutes(
@@ -131,13 +139,13 @@ const Dashboard = () => {
           if (route.id === id) {
             return {
               ...route,
-              user_feedback: route.user_feedback === feedback ? null : feedback,
+              user_feedback: updatedFeedback,
             };
           }
           return route;
         })
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating feedback:", error);
       toast({
         title: "Error",

@@ -1,11 +1,9 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Navbar } from "@/components/Navbar";
 import { AccessibilityControls } from "@/components/AccessibilityControls";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -13,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { HoldColor, ColorBlindnessFilter } from "@/lib/types";
 import { Upload, Camera, X, Map, AlertTriangle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const UploadPage = () => {
   const navigate = useNavigate();
@@ -104,7 +103,7 @@ const UploadPage = () => {
   };
   
   const handleUpload = async () => {
-    if (!imageFile) {
+    if (!imageFile || !user) {
       toast({
         title: "Missing image",
         description: "Please upload an image of the climbing route.",
@@ -116,36 +115,60 @@ const UploadPage = () => {
     try {
       setIsUploading(true);
       
-      // Simulate API call and processing time
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Upload the image to Supabase Storage
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
       
-      // Simulate successful prediction
-      const mockPrediction = {
-        grade: ["V5", "V6", "V7"][Math.floor(Math.random() * 3)],
-      };
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('route_images')
+        .upload(fileName, imageFile);
       
-      // Redirect to route preview with mock data
+      if (uploadError) {
+        throw uploadError;
+      }
+      
+      // Get the public URL for the uploaded image
+      const { data: { publicUrl } } = supabase.storage
+        .from('route_images')
+        .getPublicUrl(fileName);
+      
+      // Simulate AI prediction (in a real app, you would call your prediction API)
+      // For now, we'll generate a random difficulty grade
+      const mockGrades = ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8"];
+      const predictedGrade = mockGrades[Math.floor(Math.random() * mockGrades.length)];
+      
+      // Create a new route record in the database
+      const { data: routeData, error: routeError } = await supabase
+        .from('routes')
+        .insert({
+          user_id: user.id,
+          name: name || null,
+          image_url: publicUrl,
+          hold_color: holdColor,
+          location: location || null,
+          predicted_grade: predictedGrade,
+          user_feedback: null
+        })
+        .select()
+        .single();
+      
+      if (routeError) {
+        throw routeError;
+      }
+      
+      // Redirect to route preview with the new data
       navigate("/route-preview", {
         state: {
-          routeData: {
-            id: "new-" + Date.now(),
-            name: name || null,
-            image_url: imagePreview,
-            hold_color: holdColor,
-            location: location || null,
-            predicted_grade: mockPrediction.grade,
-            user_feedback: null,
-            created_at: new Date().toISOString(),
-          },
+          routeData: routeData,
           isNewUpload: true,
         },
       });
       
-    } catch (error) {
+    } catch (error: any) {
       console.error("Upload error:", error);
       toast({
         title: "Upload failed",
-        description: "There was an error processing your image. Please try again.",
+        description: error.message || "There was an error processing your image. Please try again.",
         variant: "destructive",
       });
       setIsUploading(false);
