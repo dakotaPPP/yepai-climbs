@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ import { AccessibilityControls } from "@/components/AccessibilityControls";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
 import { HoldColor, ColorBlindnessFilter } from "@/lib/types";
-import { Upload, Camera, X, Map, AlertTriangle } from "lucide-react";
+import { Upload as UploadIcon, Camera, X, Map, AlertTriangle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -103,7 +104,7 @@ const UploadPage = () => {
   };
   
   const handleUpload = async () => {
-    if (!imageFile || !user) {
+    if (!imagePreview || !user) {
       toast({
         title: "Missing image",
         description: "Please upload an image of the climbing route.",
@@ -115,51 +116,31 @@ const UploadPage = () => {
     try {
       setIsUploading(true);
       
-      // Upload the image to Supabase Storage
-      const fileExt = imageFile.name.split('.').pop();
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+      // Call our API endpoint
+      const response = await supabase.functions.invoke('upload', {
+        body: {
+          image: imagePreview,
+          holdColor: holdColor,
+          name: name,
+          location: location,
+          userId: user.id
+        }
+      });
       
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('route_images')
-        .upload(fileName, imageFile);
-      
-      if (uploadError) {
-        throw uploadError;
+      if (response.error) {
+        throw new Error(response.error.message || 'Upload failed');
       }
       
-      // Get the public URL for the uploaded image
-      const { data: { publicUrl } } = supabase.storage
-        .from('route_images')
-        .getPublicUrl(fileName);
+      const { data } = response;
       
-      // Simulate AI prediction (in a real app, you would call your prediction API)
-      // For now, we'll generate a random difficulty grade
-      const mockGrades = ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8"];
-      const predictedGrade = mockGrades[Math.floor(Math.random() * mockGrades.length)];
-      
-      // Create a new route record in the database
-      const { data: routeData, error: routeError } = await supabase
-        .from('routes')
-        .insert({
-          user_id: user.id,
-          name: name || null,
-          image_url: publicUrl,
-          hold_color: holdColor,
-          location: location || null,
-          predicted_grade: predictedGrade,
-          user_feedback: null
-        })
-        .select()
-        .single();
-      
-      if (routeError) {
-        throw routeError;
+      if (!data.success) {
+        throw new Error(data.error || 'Upload failed');
       }
       
       // Redirect to route preview with the new data
       navigate("/route-preview", {
         state: {
-          routeData: routeData,
+          routeData: data.route,
           isNewUpload: true,
         },
       });
@@ -178,8 +159,8 @@ const UploadPage = () => {
   return (
     <>
       <Navbar />
-      <div className={`min-h-screen pt-24 pb-16 px-6 ${highContrast ? "bg-black text-white" : ""}`}>
-        <div className="max-w-5xl mx-auto page-transition">
+      <div className={`min-h-screen pt-24 pb-16 px-6 ${highContrast ? "bg-black text-white" : "bg-white"}`}>
+        <div className="max-w-5xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">Upload New Route</h1>
             <p className="text-gray-600">
@@ -189,7 +170,7 @@ const UploadPage = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <Card className={`p-6 ${highContrast ? "high-contrast" : "card-gradient"}`}>
+              <Card className={`p-6 rounded-xl border border-gray-200 ${highContrast ? "high-contrast" : "bg-white"}`}>
                 <div className="space-y-6">
                   {!imagePreview ? (
                     <div
@@ -211,14 +192,14 @@ const UploadPage = () => {
                         className="hidden"
                       />
                       <div className="flex flex-col items-center justify-center py-4">
-                        <Upload className="h-12 w-12 text-gray-400 mb-4" />
+                        <UploadIcon className="h-12 w-12 text-gray-400 mb-4" />
                         <h3 className="text-lg font-medium mb-2">
                           Drag and drop your image here
                         </h3>
                         <p className="text-sm text-gray-500 mb-4">
                           or click to browse files (JPEG, PNG)
                         </p>
-                        <Button variant="outline" className="button-secondary">
+                        <Button variant="outline" className="rounded-full">
                           <Camera className="h-5 w-5 mr-2" />
                           Select Image
                         </Button>
@@ -252,7 +233,7 @@ const UploadPage = () => {
                         placeholder="Give your route a name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="input-field"
+                        className="rounded-lg"
                       />
                     </div>
                     
@@ -265,7 +246,7 @@ const UploadPage = () => {
                           placeholder="Where is this route located?"
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
-                          className="pl-10 input-field"
+                          className="pl-10 rounded-lg"
                         />
                       </div>
                     </div>
@@ -278,7 +259,7 @@ const UploadPage = () => {
                             key={color.value}
                             type="button"
                             variant={holdColor === color.value ? "default" : "outline"}
-                            className={`flex items-center justify-center h-10 ${
+                            className={`flex items-center justify-center h-10 rounded-lg ${
                               holdColor === color.value 
                                 ? "ring-2 ring-yepai-blue ring-offset-2" 
                                 : ""
@@ -300,8 +281,8 @@ const UploadPage = () => {
                   <div className="pt-4">
                     <Button
                       onClick={handleUpload}
-                      disabled={!imageFile || isUploading}
-                      className="w-full button-primary py-6"
+                      disabled={!imagePreview || isUploading}
+                      className="w-full rounded-lg bg-black hover:bg-gray-800 text-white py-6"
                     >
                       {isUploading ? (
                         <div className="flex items-center">
@@ -324,7 +305,7 @@ const UploadPage = () => {
                   onContrastToggle={setHighContrast}
                 />
                 
-                <Card className={`p-6 ${highContrast ? "high-contrast" : "bg-yepai-blue/5 border border-yepai-blue/20"}`}>
+                <Card className={`p-6 rounded-xl ${highContrast ? "high-contrast" : "bg-gray-50 border border-gray-200"}`}>
                   <div className="flex items-start mb-4">
                     <AlertTriangle className="h-5 w-5 text-yepai-blue mt-0.5 mr-2 flex-shrink-0" />
                     <h3 className="font-medium">Tips for best results</h3>

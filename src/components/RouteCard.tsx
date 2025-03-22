@@ -23,7 +23,7 @@ export const RouteCard = ({
 }: RouteCardProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState<"like" | "dislike" | null>(
-    route.user_feedback
+    route.user_feedback as "like" | "dislike" | null
   );
 
   const formattedDate = new Date(route.created_at).toLocaleDateString();
@@ -86,8 +86,8 @@ export const RouteCard = ({
 
   return (
     <Card 
-      className={`overflow-hidden transition-all duration-300 transform hover:shadow-lg ${
-        highContrast ? "high-contrast" : "card-gradient"
+      className={`overflow-hidden transition-all duration-300 transform hover:shadow-lg rounded-xl ${
+        highContrast ? "high-contrast" : "bg-white border border-gray-200"
       }`}
     >
       <div className="relative">
@@ -100,7 +100,7 @@ export const RouteCard = ({
         </div>
         
         <div className="absolute top-3 right-3 flex space-x-2">
-          <span className="px-3 py-1 text-xs font-medium rounded-full bg-yepai-blue/90 text-white backdrop-blur-sm">
+          <span className="px-3 py-1 text-xs font-medium rounded-full bg-black text-white backdrop-blur-sm">
             {route.predicted_grade}
           </span>
           
@@ -137,10 +137,10 @@ export const RouteCard = ({
               size="sm"
               disabled={isLoading}
               onClick={() => handleFeedback("like")}
-              className={`text-sm ${
+              className={`text-sm rounded-full ${
                 feedback === "like" 
-                  ? "text-yepai-green bg-yepai-green/10" 
-                  : "text-gray-500 hover:text-yepai-green"
+                  ? "text-green-600 bg-green-50" 
+                  : "text-gray-500 hover:text-green-600 hover:bg-green-50"
               }`}
             >
               <ThumbsUp className="h-4 w-4 mr-1" />
@@ -151,10 +151,10 @@ export const RouteCard = ({
               size="sm"
               disabled={isLoading}
               onClick={() => handleFeedback("dislike")}
-              className={`text-sm ${
+              className={`text-sm rounded-full ${
                 feedback === "dislike" 
-                  ? "text-yepai-coral bg-yepai-coral/10" 
-                  : "text-gray-500 hover:text-yepai-coral"
+                  ? "text-red-600 bg-red-50" 
+                  : "text-gray-500 hover:text-red-600 hover:bg-red-50"
               }`}
             >
               <ThumbsDown className="h-4 w-4 mr-1" />
@@ -167,7 +167,7 @@ export const RouteCard = ({
               size="sm"
               disabled={isLoading}
               onClick={handleDelete}
-              className="text-sm text-gray-400 hover:text-yepai-coral hover:bg-yepai-coral/10"
+              className="text-sm text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full"
             >
               <Trash2 className="h-4 w-4" />
             </Button>

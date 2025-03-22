@@ -3,7 +3,18 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { 
+  ArrowRight, 
+  ChevronDown, 
+  Upload, 
+  BarChart, 
+  Map, 
+  UserPlus, 
+  Zap, 
+  Eye,
+  Check,
+  Play
+} from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -21,89 +32,114 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-yepai-blue/5 to-yepai-teal/5 -z-10" />
-        
-        <div 
-          className={`max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 transition-opacity duration-1000 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <div className="lg:w-1/2 space-y-6 text-center lg:text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              <span className="text-yepai-blue">AI-Powered</span> Climbing Route Grading
-            </h1>
-            
-            <p className="text-lg text-gray-600 md:text-xl max-w-2xl">
-              Upload images of climbing routes and get instant difficulty predictions. Track your progress and manage your climbing journey.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-              <Button 
-                onClick={() => navigate("/register")} 
-                className="button-primary text-lg py-6"
-              >
-                Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+      <section className="py-24 px-6 relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div 
+            className={`flex flex-col lg:flex-row items-center justify-between gap-16 transition-opacity duration-1000 ${
+              isLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <div className="lg:w-1/2 space-y-8 text-center lg:text-left">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-gray-900">
+                AI-Powered Route <span className="bg-clip-text text-transparent bg-gradient-to-r from-yepai-blue to-yepai-teal">Grading</span>
+              </h1>
               
-              <Button 
-                variant="outline"
-                onClick={() => navigate("/login")}
-                className="button-secondary text-lg py-6"
-              >
-                Log In
-              </Button>
-            </div>
-          </div>
-          
-          <div className="lg:w-1/2 relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl animate-float">
-              <div className="absolute inset-0 bg-gradient-to-tr from-yepai-blue/20 to-transparent z-10" />
-              <img 
-                src="/placeholder.svg" 
-                alt="Climbing route preview" 
-                className="w-full h-auto object-cover"
-              />
-            </div>
-            
-            <div className="absolute -top-4 -right-4 bg-white p-3 rounded-lg shadow-lg animate-slideIn" style={{ animationDelay: "0.3s" }}>
-              <span className="text-sm font-medium text-yepai-blue">Predicted</span>
-              <h3 className="text-2xl font-bold">V7</h3>
+              <p className="text-xl text-gray-600 max-w-xl leading-relaxed">
+                Upload images of climbing routes and get instant difficulty predictions. Perfect for climbers of all levels.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
+                <Button 
+                  onClick={() => navigate("/register")} 
+                  className="rounded-full bg-black hover:bg-gray-800 text-white px-8 py-6 text-lg"
+                >
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  onClick={() => navigate("/login")}
+                  className="rounded-full border-2 border-gray-300 hover:border-gray-400 bg-transparent text-gray-800 px-8 py-6 text-lg"
+                >
+                  Log In
+                </Button>
+              </div>
             </div>
             
-            <div className="absolute -bottom-4 -left-4 bg-white p-3 rounded-lg shadow-lg animate-slideIn" style={{ animationDelay: "0.6s" }}>
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 rounded-full bg-yepai-coral"></div>
-                <span className="font-medium">Red Holds</span>
+            <div className="lg:w-1/2 relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-tr from-yepai-blue/10 to-transparent z-10" />
+                <img 
+                  src="/placeholder.svg" 
+                  alt="Climbing route preview" 
+                  className="w-full h-auto object-cover"
+                />
+                
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md p-5 rounded-xl shadow-lg flex items-center gap-3 z-20">
+                  <div className="h-12 w-12 rounded-full bg-black flex items-center justify-center">
+                    <Play className="h-5 w-5 text-white ml-1" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">See how it works</p>
+                    <p className="text-base font-bold">Watch the demo</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="absolute -top-4 -right-4 bg-white p-4 rounded-xl shadow-lg">
+                <span className="text-sm font-medium text-gray-500">Predicted Grade</span>
+                <h3 className="text-2xl font-bold">V7</h3>
+              </div>
+              
+              <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-lg">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <span className="font-medium">Red Holds</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer animate-pulse">
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer animate-bounce">
           <Button 
             variant="ghost" 
             onClick={scrollToFeatures}
-            className="rounded-full"
+            className="rounded-full h-12 w-12 flex items-center justify-center"
           >
-            <ChevronDown className="h-8 w-8 text-gray-400" />
+            <ChevronDown className="h-6 w-6 text-gray-400" />
           </Button>
+        </div>
+
+        {/* Trusted by brands section */}
+        <div className="max-w-6xl mx-auto mt-24">
+          <p className="text-center text-gray-500 text-sm font-medium mb-8">
+            TRUSTED BY CLIMBING GYMS WORLDWIDE
+          </p>
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60">
+            <div className="h-8 w-24 bg-gray-300 rounded"></div>
+            <div className="h-8 w-32 bg-gray-300 rounded"></div>
+            <div className="h-8 w-28 bg-gray-300 rounded"></div>
+            <div className="h-8 w-24 bg-gray-300 rounded"></div>
+            <div className="h-8 w-32 bg-gray-300 rounded"></div>
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16 animate-slideUp">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Features designed for <span className="text-yepai-blue">climbers</span>
+      <section id="features" className="py-24 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 animate-fadeIn">
+            <span className="text-sm font-semibold text-yepai-blue uppercase tracking-wider">Features</span>
+            <h2 className="text-4xl md:text-5xl font-bold mt-3 mb-6 tracking-tight">
+              Made for <span className="text-yepai-blue">Climbers</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Everything you need to analyze, track, and improve your climbing experience.
             </p>
           </div>
@@ -112,14 +148,80 @@ const Index = () => {
             {features.map((feature, index) => (
               <div 
                 key={index} 
-                className="glass-card rounded-xl p-6 transition-all duration-300 hover:shadow-lg animate-slideUp"
-                style={{ animationDelay: `${0.1 * index}s` }}
+                className="p-8 rounded-2xl transition-all duration-300 hover:shadow-lg border border-gray-100 hover:border-gray-200 bg-white"
               >
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-yepai-blue/10 mb-4">
-                  <feature.icon className="h-6 w-6 text-yepai-blue" />
+                <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-gray-100 mb-6">
+                  <feature.icon className="h-7 w-7 text-gray-700" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works section */}
+      <section className="py-24 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-sm font-semibold text-yepai-blue uppercase tracking-wider">Process</span>
+            <h2 className="text-4xl md:text-5xl font-bold mt-3 mb-6 tracking-tight">
+              How it works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Get your climbing routes graded in three simple steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step, index) => (
+              <div 
+                key={index} 
+                className="relative bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
+              >
+                <div className="absolute -top-5 -left-5 w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">
+                  {index + 1}
+                </div>
+                <h3 className="text-xl font-bold mt-4 mb-3">{step.title}</h3>
+                <p className="text-gray-600">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-sm font-semibold text-yepai-blue uppercase tracking-wider">Testimonials</span>
+            <h2 className="text-4xl md:text-5xl font-bold mt-3 mb-6 tracking-tight">
+              What climbers are saying
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div 
+                key={index} 
+                className="p-8 rounded-2xl bg-gray-50 border border-gray-100"
+              >
+                <div className="flex items-center space-x-1 text-yepai-blue mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-6 italic">{testimonial.comment}</p>
+                <div className="flex items-center">
+                  <div className="h-10 w-10 rounded-full bg-gray-300 mr-3"></div>
+                  <div>
+                    <p className="font-medium">{testimonial.name}</p>
+                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -127,42 +229,52 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-yepai-blue to-yepai-teal text-white">
-        <div className="max-w-4xl mx-auto text-center animate-fadeIn">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to elevate your climbing experience?
+      <section className="py-24 px-6 bg-black text-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            Ready to elevate your climbing?
           </h2>
-          <p className="text-lg md:text-xl opacity-90 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
             Join Yepai today and start getting AI-powered insights on your climbing routes.
           </p>
           <Button 
             onClick={() => navigate("/register")}
-            className="bg-white text-yepai-blue hover:bg-gray-100 text-lg py-6 px-8"
+            className="rounded-full bg-white text-black hover:bg-gray-100 text-lg py-7 px-10"
           >
             Create Your Free Account
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
+          <p className="mt-6 text-sm text-gray-400">No credit card required</p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="text-2xl font-semibold mb-6">
-            <span className="text-yepai-blue">Yep</span>
-            <span className="text-yepai-coral">ai</span>
+      <footer className="py-16 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-12">
+            <div className="text-2xl font-bold mb-6 md:mb-0">
+              <span className="text-yepai-blue">Yep</span>
+              <span className="text-yepai-coral">ai</span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-8 text-gray-600">
+              <a href="#" className="hover:text-yepai-blue transition-colors">Features</a>
+              <a href="#" className="hover:text-yepai-blue transition-colors">Pricing</a>
+              <a href="#" className="hover:text-yepai-blue transition-colors">Blog</a>
+              <a href="#" className="hover:text-yepai-blue transition-colors">About</a>
+              <a href="#" className="hover:text-yepai-blue transition-colors">Contact</a>
+            </div>
           </div>
-          <p className="text-gray-500 mb-8">
-            AI-powered climbing route analysis
-          </p>
-          <div className="flex justify-center space-x-8 text-sm text-gray-500">
-            <a href="#" className="hover:text-yepai-blue transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-yepai-blue transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-yepai-blue transition-colors">Contact</a>
+          
+          <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-sm text-gray-500 mb-4 md:mb-0">
+              © {new Date().getFullYear()} Yepai. All rights reserved.
+            </p>
+            <div className="flex space-x-6 text-sm text-gray-500">
+              <a href="#" className="hover:text-yepai-blue transition-colors">Terms</a>
+              <a href="#" className="hover:text-yepai-blue transition-colors">Privacy</a>
+              <a href="#" className="hover:text-yepai-blue transition-colors">Cookies</a>
+            </div>
           </div>
-          <p className="mt-8 text-xs text-gray-400">
-            © {new Date().getFullYear()} Yepai. All rights reserved.
-          </p>
         </div>
       </footer>
     </div>
@@ -170,8 +282,6 @@ const Index = () => {
 };
 
 // Feature data
-import { Upload, BarChart, Map, UserPlus, Zap, Eye } from "lucide-react";
-
 const features = [
   {
     title: "AI Grading",
@@ -179,9 +289,9 @@ const features = [
     icon: Zap,
   },
   {
-    title: "Route Uploads",
-    description: "Easily upload photos of climbing routes with details like hold color and location.",
-    icon: Upload,
+    title: "Route Management",
+    description: "Organize your climbing routes, provide feedback, and track your progress over time.",
+    icon: BarChart,
   },
   {
     title: "Accessibility Features",
@@ -189,9 +299,9 @@ const features = [
     icon: Eye,
   },
   {
-    title: "Route Management",
-    description: "Organize your climbing routes, provide feedback, and track your progress.",
-    icon: BarChart,
+    title: "Simple Uploads",
+    description: "Easily upload photos of climbing routes with details like hold color and location.",
+    icon: Upload,
   },
   {
     title: "Location Tracking",
@@ -199,9 +309,44 @@ const features = [
     icon: Map,
   },
   {
-    title: "User Accounts",
+    title: "Personal Account",
     description: "Create an account to save your routes and access your climbing history anytime.",
     icon: UserPlus,
+  },
+];
+
+// Steps data
+const steps = [
+  {
+    title: "Upload your route",
+    description: "Take a photo of the climbing route and upload it to the app with basic details.",
+  },
+  {
+    title: "AI analyzes the route",
+    description: "Our AI model processes the image and calculates the difficulty based on hold patterns.",
+  },
+  {
+    title: "Get your grade",
+    description: "Receive an accurate difficulty prediction within seconds and save it to your profile.",
+  },
+];
+
+// Testimonials data
+const testimonials = [
+  {
+    comment: "Yepai has completely changed how I approach new routes. The AI grading is surprisingly accurate!",
+    name: "Sarah Johnson",
+    role: "Competitive Climber",
+  },
+  {
+    comment: "As a climbing gym owner, this tool helps us standardize our route difficulties across locations.",
+    name: "Mike Peterson",
+    role: "Gym Owner",
+  },
+  {
+    comment: "The app is intuitive and the predictions have been spot on. Great for tracking my progress.",
+    name: "Alex Chen",
+    role: "Recreational Climber",
   },
 ];
 
