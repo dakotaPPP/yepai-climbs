@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Route } from "@/lib/types";
 import { ThumbsUp, ThumbsDown, Trash2, MapPin } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface RouteCardProps {
   route: Route;
@@ -18,6 +19,7 @@ export const RouteCard = ({
   onDelete,
   onFeedback,
 }: RouteCardProps) => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState<"like" | "dislike" | null>(
     route.user_feedback as "like" | "dislike" | null
@@ -25,7 +27,10 @@ export const RouteCard = ({
 
   const formattedDate = new Date(route.created_at).toLocaleDateString();
 
-  const handleFeedback = async (newFeedback: "like" | "dislike") => {
+  const handleFeedback = async (newFeedback: "like" | "dislike", e: React.MouseEvent) => {
+    // Stop propagation to prevent card click when feedback buttons are clicked
+    e.stopPropagation();
+    
     if (isLoading) return;
     
     try {
@@ -56,7 +61,10 @@ export const RouteCard = ({
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    // Stop propagation to prevent card click when delete button is clicked
+    e.stopPropagation();
+    
     if (isLoading) return;
     
     try {
@@ -81,18 +89,29 @@ export const RouteCard = ({
     }
   };
 
+  const handleCardClick = () => {
+    // Navigate to the route preview page with the route data
+    navigate("/route-preview", {
+      state: {
+        routeData: route,
+        isNewUpload: false,
+      },
+    });
+  };
+
   return (
     <Card 
-      className={`overflow-hidden transition-all duration-300 transform hover:shadow-lg rounded-xl ${
+      className={`overflow-hidden rounded-xl clickable-card ${
         highContrast ? "high-contrast" : "bg-white border border-gray-200"
       }`}
+      onClick={handleCardClick}
     >
       <div className="relative">
         <div className="aspect-[4/3] overflow-hidden">
           <img
             src={route.image_url || "/placeholder.svg"}
             alt={route.name || "Climbing route"}
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
         
@@ -133,7 +152,7 @@ export const RouteCard = ({
               variant="ghost"
               size="sm"
               disabled={isLoading}
-              onClick={() => handleFeedback("like")}
+              onClick={(e) => handleFeedback("like", e)}
               className={`text-sm rounded-full ${
                 feedback === "like" 
                   ? "text-green-600 bg-green-50" 
@@ -147,7 +166,7 @@ export const RouteCard = ({
               variant="ghost"
               size="sm"
               disabled={isLoading}
-              onClick={() => handleFeedback("dislike")}
+              onClick={(e) => handleFeedback("dislike", e)}
               className={`text-sm rounded-full ${
                 feedback === "dislike" 
                   ? "text-red-600 bg-red-50" 
@@ -163,7 +182,7 @@ export const RouteCard = ({
               variant="ghost"
               size="sm"
               disabled={isLoading}
-              onClick={handleDelete}
+              onClick={(e) => handleDelete(e)}
               className="text-sm text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full"
             >
               <Trash2 className="h-4 w-4" />

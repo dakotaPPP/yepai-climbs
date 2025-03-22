@@ -252,26 +252,6 @@ const RoutePreview = () => {
                     </div>
                     
                     <div className="flex space-x-2">
-                      {isNewUpload ? (
-                        <Button
-                          variant="default"
-                          onClick={handleSave}
-                          className="button-primary"
-                          disabled={isSaving}
-                        >
-                          {isSaving ? (
-                            <>
-                              <LoadingSpinner size="sm" className="mr-2" />
-                              Saving...
-                            </>
-                          ) : (
-                            <>
-                              <Save className="h-5 w-5 mr-2" />
-                              Save to Collection
-                            </>
-                          )}
-                        </Button>
-                      ) : (
                         <Button
                           variant="outline"
                           onClick={handleDelete}
@@ -281,7 +261,6 @@ const RoutePreview = () => {
                           <Trash2 className="h-5 w-5 mr-2" />
                           Delete Route
                         </Button>
-                      )}
                     </div>
                   </div>
                 </div>
