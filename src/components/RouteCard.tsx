@@ -96,20 +96,20 @@ export const RouteCard = ({
           />
         </div>
         
-        <div className="absolute top-3 right-3 flex space-x-2">
-          <span className="px-3 py-1 text-xs font-medium rounded-full bg-black text-white backdrop-blur-sm">
-            {route.predicted_grade}
-          </span>
-          
-          <span 
-            className="px-3 py-1 text-xs font-medium rounded-full backdrop-blur-sm"
+        {/* Corner Ribbon for Grade and Hold Color */}
+        <div className="corner-ribbon">
+          <div
+            className="corner-ribbon-inner"
             style={{ 
               backgroundColor: getHoldColorBg(route.hold_color),
               color: getHoldColorText(route.hold_color)
             }}
           >
-            {route.hold_color}
-          </span>
+            <div className="flex flex-col items-center justify-center">
+              <span className="text-xs opacity-90 font-medium">{route.hold_color}</span>
+              <span className="text-sm font-bold">{route.predicted_grade}</span>
+            </div>
+          </div>
         </div>
       </div>
       

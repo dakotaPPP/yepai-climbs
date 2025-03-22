@@ -106,4 +106,12 @@
   .subtitle {
     @apply text-base text-gray-500 mb-8;
   }
+  
+  .corner-ribbon {
+    @apply absolute top-0 right-0 overflow-hidden w-36 h-36 z-10;
+  }
+  
+  .corner-ribbon-inner {
+    @apply absolute transform rotate-45 top-[12px] right-[-90px] w-[255px] py-2 text-center shadow-lg border-t border-white/20 border-b border-black/20;
+  }
 }
