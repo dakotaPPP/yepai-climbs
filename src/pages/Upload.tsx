@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -104,7 +103,7 @@ const UploadPage = () => {
   };
   
   const handleUpload = async () => {
-    if (!imagePreview || !user) {
+    if (!imagePreview || !user || !imageFile) {
       toast({
         title: "Missing image",
         description: "Please upload an image of the climbing route.",
@@ -116,31 +115,75 @@ const UploadPage = () => {
     try {
       setIsUploading(true);
       
-      // Call our API endpoint
-      const response = await supabase.functions.invoke('upload', {
-        body: {
-          image: imagePreview,
-          holdColor: holdColor,
-          name: name,
-          location: location,
-          userId: user.id
-        }
+      // Process base64 image
+      const base64Data = imagePreview.split(',')[1];
+      const imageData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+      
+      // Generate unique file name
+      const fileExt = imageFile.name.split('.').pop() || 'jpg';
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+      
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase
+        .storage
+        .from('route_images')
+        .upload(fileName, imageData, {
+          contentType: imageFile.type,
+          cacheControl: '3600'
+        });
+
+      if (uploadError) {
+        throw new Error('Failed to upload image: ' + uploadError.message);
+      }
+
+      // Get the public URL
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from('route_images')
+        .getPublicUrl(fileName);
+      
+      // Call FastAPI backend for grade prediction
+      const predictionResponse = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image_url: publicUrl,
+          hold_color: holdColor
+        }),
       });
       
-      if (response.error) {
-        throw new Error(response.error.message || 'Upload failed');
+      if (!predictionResponse.ok) {
+        const errorData = await predictionResponse.json();
+        throw new Error(errorData.detail || 'Failed to predict grade');
       }
       
-      const { data } = response;
+      const predictionData = await predictionResponse.json();
+      const predictedGrade = predictionData.grade; // Assuming FastAPI returns a grade field
       
-      if (!data.success) {
-        throw new Error(data.error || 'Upload failed');
+      // Insert into routes table with the predicted grade
+      const { data: routeData, error: routeError } = await supabase
+        .from('routes')
+        .insert({
+          user_id: user.id,
+          name: name || null,
+          image_url: publicUrl,
+          hold_color: holdColor,
+          location: location || null,
+          predicted_grade: predictedGrade
+        })
+        .select()
+        .single();
+
+      if (routeError) {
+        throw new Error('Failed to save route data: ' + routeError.message);
       }
       
       // Redirect to route preview with the new data
       navigate("/route-preview", {
         state: {
-          routeData: data.route,
+          routeData,
           isNewUpload: true,
         },
       });
@@ -152,6 +195,7 @@ const UploadPage = () => {
         description: error.message || "There was an error processing your image. Please try again.",
         variant: "destructive",
       });
+    } finally {
       setIsUploading(false);
     }
   };
