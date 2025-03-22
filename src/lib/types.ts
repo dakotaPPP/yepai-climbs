@@ -1,4 +1,3 @@
-
 export interface Route {
   id: string;
   name: string | null;
@@ -15,8 +14,6 @@ export interface User {
   email: string;
   name?: string;
 }
-
-export type ColorBlindnessFilter = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
 
 export type HoldColor = 
   | 'red' 

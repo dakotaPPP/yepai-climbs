@@ -1,14 +1,12 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Route, ColorBlindnessFilter } from "@/lib/types";
+import { Route } from "@/lib/types";
 import { ThumbsUp, ThumbsDown, Trash2, MapPin } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
 interface RouteCardProps {
   route: Route;
-  colorFilter?: ColorBlindnessFilter;
   highContrast?: boolean;
   onDelete?: (id: string) => void;
   onFeedback?: (id: string, feedback: "like" | "dislike") => void;
@@ -16,7 +14,6 @@ interface RouteCardProps {
 
 export const RouteCard = ({
   route,
-  colorFilter = "none",
   highContrast = false,
   onDelete,
   onFeedback,
@@ -91,7 +88,7 @@ export const RouteCard = ({
       }`}
     >
       <div className="relative">
-        <div className={`aspect-[4/3] overflow-hidden ${colorFilter !== "none" ? colorFilter : ""}`}>
+        <div className="aspect-[4/3] overflow-hidden">
           <img
             src={route.image_url || "/placeholder.svg"}
             alt={route.name || "Climbing route"}

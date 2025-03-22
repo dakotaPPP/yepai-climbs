@@ -17,6 +17,8 @@ class GradePrediction(BaseModel):
 
 @app.post("/api/upload", response_model=GradePrediction)
 async def predict_grade(route: RouteInput):
+    print(route.image_url)
+    print(route.hold_color)
     """
     Predicts the climbing grade of a route based on image and hold color.
     

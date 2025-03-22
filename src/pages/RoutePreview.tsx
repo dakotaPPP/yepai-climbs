@@ -6,7 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { AccessibilityControls } from "@/components/AccessibilityControls";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
-import { Route, ColorBlindnessFilter } from "@/lib/types";
+import { Route } from "@/lib/types";
 import { ThumbsUp, ThumbsDown, ArrowLeft, Trash2, Save } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,7 +24,6 @@ const RoutePreview = () => {
   const [feedback, setFeedback] = useState<"like" | "dislike" | null>(
     routeData?.user_feedback || null
   );
-  const [colorFilter, setColorFilter] = useState<ColorBlindnessFilter>("none");
   const [highContrast, setHighContrast] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   
@@ -188,7 +187,7 @@ const RoutePreview = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <Card className={`overflow-hidden ${highContrast ? "high-contrast" : "card-gradient"}`}>
-                <div className={`aspect-video overflow-hidden ${colorFilter !== "none" ? colorFilter : ""}`}>
+                <div className="aspect-video overflow-hidden">
                   <img
                     src={route.image_url || "/placeholder.svg"}
                     alt={route.name || "Climbing route"}
@@ -314,7 +313,6 @@ const RoutePreview = () => {
             <div className="lg:col-span-1">
               <div className="space-y-6">
                 <AccessibilityControls
-                  onFilterChange={setColorFilter}
                   onContrastToggle={setHighContrast}
                 />
                 

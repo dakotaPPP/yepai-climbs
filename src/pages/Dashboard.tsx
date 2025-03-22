@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { RouteCard } from "@/components/RouteCard";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AccessibilityControls } from "@/components/AccessibilityControls";
 import { useAuth } from "@/hooks/useAuth";
-import { Route, ColorBlindnessFilter } from "@/lib/types";
+import { Route } from "@/lib/types";
 import { Plus, Search, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
@@ -21,7 +20,6 @@ const Dashboard = () => {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [colorFilter, setColorFilter] = useState<ColorBlindnessFilter>("none");
   const [highContrast, setHighContrast] = useState(false);
   
   useEffect(() => {
@@ -206,10 +204,7 @@ const Dashboard = () => {
             </div>
             
             <div className="lg:col-span-1">
-              <AccessibilityControls
-                onFilterChange={setColorFilter}
-                onContrastToggle={setHighContrast}
-              />
+              <AccessibilityControls onContrastToggle={setHighContrast} />
             </div>
           </div>
           
@@ -245,7 +240,6 @@ const Dashboard = () => {
                 <RouteCard
                   key={route.id}
                   route={route}
-                  colorFilter={colorFilter}
                   highContrast={highContrast}
                   onDelete={handleDeleteRoute}
                   onFeedback={handleFeedback}

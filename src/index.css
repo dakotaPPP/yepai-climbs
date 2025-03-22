@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -76,18 +75,6 @@
     @apply bg-gradient-to-r from-yepai-coral to-yepai-yellow;
   }
   
-  .protanopia {
-    filter: url('#protanopia-filter');
-  }
-  
-  .deuteranopia {
-    filter: url('#deuteranopia-filter');
-  }
-  
-  .tritanopia {
-    filter: url('#tritanopia-filter');
-  }
-  
   .high-contrast {
     @apply bg-black text-white border-white;
   }
@@ -119,11 +106,4 @@
   .subtitle {
     @apply text-base text-gray-500 mb-8;
   }
-}
-
-/* SVG filters for color blindness simulation */
-.svg-filters {
-  position: absolute;
-  width: 0;
-  height: 0;
 }

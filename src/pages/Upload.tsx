@@ -8,7 +8,7 @@ import { Navbar } from "@/components/Navbar";
 import { AccessibilityControls } from "@/components/AccessibilityControls";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
-import { HoldColor, ColorBlindnessFilter } from "@/lib/types";
+import { HoldColor } from "@/lib/types";
 import { Upload as UploadIcon, Camera, X, Map, AlertTriangle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,7 +25,6 @@ const UploadPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [colorFilter, setColorFilter] = useState<ColorBlindnessFilter>("none");
   const [highContrast, setHighContrast] = useState(false);
   
   useEffect(() => {
@@ -251,7 +250,7 @@ const UploadPage = () => {
                     </div>
                   ) : (
                     <div className="relative">
-                      <div className={`aspect-video rounded-lg overflow-hidden ${colorFilter !== "none" ? colorFilter : ""}`}>
+                      <div className="aspect-video rounded-lg overflow-hidden">
                         <img
                           src={imagePreview}
                           alt="Route preview"
@@ -345,7 +344,6 @@ const UploadPage = () => {
             <div className="lg:col-span-1">
               <div className="space-y-6">
                 <AccessibilityControls
-                  onFilterChange={setColorFilter}
                   onContrastToggle={setHighContrast}
                 />
                 
