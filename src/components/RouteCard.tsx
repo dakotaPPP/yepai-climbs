@@ -138,13 +138,13 @@ export const RouteCard = ({
         </h3>
         
         {route.location && (
-          <p className={`text-sm ${highContrast ? "text-white" : "text-gray-500"} mb-3 flex items-center`}>
+          <p className={`text-sm ${highContrast ? "text-black" : "text-gray-500"} mb-3 flex items-center`}>
             <MapPin className="h-3 w-3 mr-1" />
             {route.location}
           </p>
         )}
         
-        <p className={`text-xs ${highContrast ? "text-white" : "text-gray-400"} mb-4`}>{formattedDate}</p>
+        <p className={`text-xs ${highContrast ? "text-black" : "text-gray-400"} mb-4`}>{formattedDate}</p>
         
         <div className="flex justify-between items-center">
           <div className="flex space-x-2">
@@ -155,9 +155,11 @@ export const RouteCard = ({
               onClick={(e) => handleFeedback("like", e)}
               className={`text-sm rounded-full ${
                 highContrast
-                  ? "text-white border-white border-2 hover:bg-white hover:text-black"
-                  : feedback === "like" 
-                    ? "text-green-600 bg-green-50" 
+                  ? feedback === "like"
+                    ? "text-white border-black border-2 bg-black"
+                    : "text-black border-black border-2 hover:bg-black hover:text-white"
+                  : feedback === "like"
+                    ? "text-green-600 bg-green-50 border-green-600 border-2"
                     : "text-gray-500 hover:text-green-600 hover:bg-green-50"
               }`}
             >
@@ -171,9 +173,11 @@ export const RouteCard = ({
               onClick={(e) => handleFeedback("dislike", e)}
               className={`text-sm rounded-full ${
                 highContrast
-                  ? "text-white border-white border-2 hover:bg-white hover:text-black"
-                  : feedback === "dislike" 
-                    ? "text-red-600 bg-red-50" 
+                  ? feedback === "dislike"
+                    ? "text-white border-black border-2 bg-black"
+                    : "text-black border-black border-2 hover:bg-black hover:text-white"
+                  : feedback === "dislike"
+                    ? "text-red-600 bg-red-50 border-red-600 border-2"
                     : "text-gray-500 hover:text-red-600 hover:bg-red-50"
               }`}
             >
@@ -189,7 +193,7 @@ export const RouteCard = ({
               onClick={(e) => handleDelete(e)}
               className={`text-sm rounded-full ${
                 highContrast
-                  ? "text-white border-white border-2 hover:bg-white hover:text-black"
+                  ? "text-black border-black border-2 hover:bg-black hover:text-white"
                   : "text-gray-400 hover:text-red-600 hover:bg-red-50"
               }`}
             >

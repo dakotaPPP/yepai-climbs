@@ -118,13 +118,13 @@ const Index = () => {
               
               <div className="absolute -top-4 -right-4 bg-white p-4 rounded-xl shadow-lg">
                 <span className="text-sm font-medium text-gray-500">Predicted Grade</span>
-                <h3 className="text-2xl font-bold">V7</h3>
+                <h3 className="text-2xl font-bold">V1</h3>
               </div>
               
               <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-lg">
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                  <span className="font-medium">Blue Holds</span>
+                  <div className="w-3 h-3 rounded-full bg-black"></div>
+                  <span className="font-medium">Black Holds</span>
                 </div>
               </div>
             </div>

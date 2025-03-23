@@ -173,7 +173,7 @@ const RoutePreview = () => {
             <Button
               variant={highContrast ? "outline" : "ghost"}
               onClick={() => navigate("/dashboard")}
-              className={`${highContrast ? "text-white border-white border-2 hover:bg-white hover:text-black" : "text-gray-500"} mr-4`}
+              className={`${highContrast ? "text-black border-white border-2 hover:bg-black hover:text-white" : "text-gray-500"} mr-4`}
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
               Back to Dashboard
@@ -208,12 +208,12 @@ const RoutePreview = () => {
                     </div>
                     
                     <div className="mt-4 md:mt-0 flex space-x-3">
-                      <div className="px-4 py-2 rounded-full bg-yepai-blue/10 text-yepai-blue font-medium flex items-center">
+                      <div className={`px-4 py-2 rounded-full ${highContrast ? "bg-white text-black border-2 border-black" : "bg-yepai-blue/10 text-yepai-blue font-medium flex items-center"}`}>
                         <span className="text-xs mr-1">Hold Color:</span>
                         <span className="font-semibold">{route.hold_color}</span>
                       </div>
                       
-                      <div className="px-4 py-2 rounded-full bg-gradient-to-r from-yepai-blue to-yepai-teal text-white font-medium">
+                      <div className={`px-4 py-2 rounded-full ${highContrast ? "bg-white text-black border-2 border-black" : "bg-gradient-to-r from-yepai-blue to-yepai-teal text-white font-medium"}`}>
                         <span className="text-xs mr-1">Grade:</span>
                         <span className="font-semibold">{route.predicted_grade}</span>
                       </div>
@@ -228,11 +228,11 @@ const RoutePreview = () => {
                         className={
                           feedback === "like" 
                             ? (highContrast 
-                              ? "bg-white text-black border-2 border-black" 
+                              ? "bg-black text-white border-2 border-black hover:bg-white hover:text-black" 
                               : "bg-yepai-green text-white")
                             : (highContrast
-                              ? "text-white border-white border-2 hover:bg-white hover:text-black"
-                              : "text-gray-700")
+                              ? "bg-white text-black border-2 border-black hover:bg-black hover:text-white"
+                              : "text-gray-700 hover:bg-green-500/10 hover:text-green-500 hover:border-green-500")
                         }
                         disabled={isLoading}
                       >
@@ -246,11 +246,11 @@ const RoutePreview = () => {
                         className={
                           feedback === "dislike" 
                             ? (highContrast 
-                              ? "bg-white text-black border-2 border-black" 
-                              : "bg-yepai-coral text-white")
+                              ? "bg-white text-black border-2 border-black hover:bg-black hover:text-white" 
+                              : "bg-red-500 text-white")
                             : (highContrast
-                              ? "text-white border-white border-2 hover:bg-white hover:text-black"
-                              : "text-gray-700")
+                              ? "text-black border-black bg-white border-2 hover:bg-black hover:text-white"
+                              : "text-gray-700 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500")
                         }
                         disabled={isLoading}
                       >
@@ -264,8 +264,8 @@ const RoutePreview = () => {
                           variant="outline"
                           onClick={handleDelete}
                           className={highContrast 
-                            ? "text-white border-white border-2 hover:bg-white hover:text-black" 
-                            : "text-yepai-coral border-yepai-coral/30 hover:bg-yepai-coral/10"
+                            ? "bg-white text-black border-2 border-black hover:bg-black hover:text-white"
+                            : "text-red-500 border-red-500 hover:bg-red-500 hover:text-white"
                           }
                           disabled={isLoading}
                         >
