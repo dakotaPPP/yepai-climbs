@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -41,11 +40,12 @@ export const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div 
-          className="text-2xl font-semibold cursor-pointer" 
+          className="cursor-pointer bg-gradient-to-r from-yepai-blue via-purple-500 to-yepai-coral rounded-lg px-4 py-2"
           onClick={() => navigate("/")}
         >
-          <span className="text-yepai-blue">Yep</span>
-          <span className="text-yepai-coral">ai</span>
+          <span className="text-2xl font-semibold font-parkinsans tracking-tighter text-white" style={{ letterSpacing: "-0.05em" }}>
+            YepAI
+          </span>
         </div>
         
         <div className="flex items-center space-x-4">

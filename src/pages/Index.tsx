@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { 
   ArrowRight, 
   ChevronDown, 
@@ -74,7 +75,7 @@ const Index = () => {
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-tr from-yepai-blue/10 to-transparent z-10" />
                 <img 
-                  src="/placeholder.svg" 
+                  src="/demo-image.png" 
                   alt="Climbing route preview" 
                   className="w-full h-auto object-cover"
                 />
@@ -97,8 +98,8 @@ const Index = () => {
               
               <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-lg">
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <span className="font-medium">Red Holds</span>
+                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                  <span className="font-medium">Blue Holds</span>
                 </div>
               </div>
             </div>
@@ -268,7 +269,7 @@ const Index = () => {
             Ready to elevate your climbing?
           </h2>
           <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
-            Join Yepai today and start getting AI-powered insights on your climbing routes.
+            Join YepAI today and start getting AI-powered insights on your climbing routes.
           </p>
           <Button 
             onClick={() => navigate("/register")}
@@ -281,35 +282,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-16 px-6 bg-white border-t border-gray-100">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-12">
-            <div className="text-2xl font-bold mb-6 md:mb-0">
-              <span className="text-yepai-blue">Yep</span>
-              <span className="text-yepai-coral">ai</span>
-            </div>
-            <div className="flex flex-wrap justify-center gap-8 text-gray-600">
-              <a href="#" className="hover:text-yepai-blue transition-colors">Features</a>
-              <a href="#" className="hover:text-yepai-blue transition-colors">Pricing</a>
-              <a href="#" className="hover:text-yepai-blue transition-colors">Blog</a>
-              <a href="#" className="hover:text-yepai-blue transition-colors">About</a>
-              <a href="#" className="hover:text-yepai-blue transition-colors">Contact</a>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-500 mb-4 md:mb-0">
-              © {new Date().getFullYear()} Yepai. All rights reserved.
-            </p>
-            <div className="flex space-x-6 text-sm text-gray-500">
-              <a href="#" className="hover:text-yepai-blue transition-colors">Terms</a>
-              <a href="#" className="hover:text-yepai-blue transition-colors">Privacy</a>
-              <a href="#" className="hover:text-yepai-blue transition-colors">Cookies</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
