@@ -25,4 +25,4 @@ export type HoldColor =
   | 'pink' 
   | 'black' 
   | 'white' 
-  | 'brown';
+  | 'gray';

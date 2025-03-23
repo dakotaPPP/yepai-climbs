@@ -7,11 +7,17 @@ import { RouteCard } from "@/components/RouteCard";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AccessibilityControls } from "@/components/AccessibilityControls";
 import { useAuth } from "@/hooks/useAuth";
-import { Route } from "@/lib/types";
-import { Plus, Search, Filter } from "lucide-react";
+import { Route, HoldColor } from "@/lib/types";
+import { Plus, Search, Filter, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,6 +27,24 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [highContrast, setHighContrast] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({
+    sortBy: "latest" as "latest" | "oldest",
+    holdColor: "" as HoldColor | "",
+    gradeRange: "all" as "all" | "beginner" | "intermediate" | "advanced"
+  });
+
+  const holdColors: { value: HoldColor; label: string; color: string }[] = [
+    { value: "red", label: "Red", color: "#ef4444" },
+    { value: "blue", label: "Blue", color: "#3b82f6" },
+    { value: "green", label: "Green", color: "#22c55e" },
+    { value: "yellow", label: "Yellow", color: "#eab308" },
+    { value: "orange", label: "Orange", color: "#f97316" },
+    { value: "purple", label: "Purple", color: "#a855f7" },
+    { value: "pink", label: "Pink", color: "#ec4899" },
+    { value: "black", label: "Black", color: "#171717" },
+    { value: "white", label: "White", color: "#f5f5f5" },
+    { value: "gray", label: "Gray", color: "#808080" },
+  ];
   
   useEffect(() => {
     if (!authLoading && !user) {
@@ -153,18 +177,44 @@ const Dashboard = () => {
     }
   };
   
-  // Filter routes based on search query
+  // Filter routes based on search query and active filters
   const filteredRoutes = routes.filter(route => {
     const routeName = route.name || "Untitled Route";
     const routeLocation = route.location || "";
-    
-    return (
+    const matchesSearch = (
       routeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       routeLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
       route.predicted_grade.toLowerCase().includes(searchQuery.toLowerCase()) ||
       route.hold_color.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const matchesColor = !activeFilters.holdColor || route.hold_color === activeFilters.holdColor;
+
+    const gradeValue = parseInt(route.predicted_grade.replace(/\D/g, ''));
+    let matchesGrade = true;
+    if (activeFilters.gradeRange === "beginner") {
+      matchesGrade = gradeValue <= 3;
+    } else if (activeFilters.gradeRange === "intermediate") {
+      matchesGrade = gradeValue > 3 && gradeValue <= 6;
+    } else if (activeFilters.gradeRange === "advanced") {
+      matchesGrade = gradeValue > 6;
+    }
+
+    return matchesSearch && matchesColor && matchesGrade;
+  }).sort((a, b) => {
+    if (activeFilters.sortBy === "latest") {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    } else {
+      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+    }
   });
+
+  const handleFilterChange = (type: keyof typeof activeFilters, value: string) => {
+    setActiveFilters(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
   
   return (
     <>
@@ -200,6 +250,115 @@ const Dashboard = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
+              </div>
+
+              {/* Filter buttons */}
+              <div className="flex flex-wrap gap-3 mb-6">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`rounded-full ${
+                        highContrast
+                          ? "border-2 border-white text-black hover:bg-white hover:text-black"
+                          : "border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      <Filter className="h-4 w-4 mr-2" />
+                      {activeFilters.gradeRange === "all" ? "All Grades" : 
+                       activeFilters.gradeRange === "beginner" ? "Beginner (V0-V3)" :
+                       activeFilters.gradeRange === "intermediate" ? "Intermediate (V4-V6)" : "Advanced (V7+)"}
+                      <ChevronDown className="h-4 w-4 ml-2" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => handleFilterChange("gradeRange", "all")}>
+                      All Grades
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterChange("gradeRange", "beginner")}>
+                      Beginner (V0-V3)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterChange("gradeRange", "intermediate")}>
+                      Intermediate (V4-V6)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterChange("gradeRange", "advanced")}>
+                      Advanced (V7+)
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`rounded-full ${
+                        highContrast
+                          ? "border-2 border-white text-black hover:bg-white hover:text-black"
+                          : "border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      {!highContrast && activeFilters.holdColor ? (
+                        <div 
+                          className={`h-3 w-3 rounded-full mr-2 ${activeFilters.holdColor === "white" ? "border border-black" : ""}`}
+                          style={{ 
+                            backgroundColor: holdColors.find(c => c.value === activeFilters.holdColor)?.color 
+                          }} 
+                        />
+                      ) : null}
+                      {activeFilters.holdColor ? 
+                        holdColors.find(c => c.value === activeFilters.holdColor)?.label : 
+                        "Hold Color"}
+                      <ChevronDown className="h-4 w-4 ml-2" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => handleFilterChange("holdColor", "")}>
+                      All Colors
+                    </DropdownMenuItem>
+                    {holdColors.map((color) => (
+                      <DropdownMenuItem 
+                        key={color.value}
+                        onClick={() => handleFilterChange("holdColor", color.value)}
+                      >
+                        {!highContrast && (
+                          <div 
+                            className={`h-3 w-3 rounded-full mr-2 ${color.value === "white" ? "border border-black" : ""}`}
+                            style={{ backgroundColor: color.color }} 
+                          />
+                        )}
+                        {color.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`rounded-full ${
+                    highContrast
+                      ? "border-2 border-white text-gray-500 hover:bg-white hover:text-black"
+                      : "border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                  } ${activeFilters.sortBy === "latest" ? (highContrast ? "bg-white text-black" : "bg-gray-100") : ""}`}
+                  onClick={() => handleFilterChange("sortBy", "latest")}
+                >
+                  Latest
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`rounded-full ${
+                    highContrast
+                      ? "border-2 border-white text-gray-500 hover:bg-white hover:text-black"
+                      : "border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                  } ${activeFilters.sortBy === "oldest" ? (highContrast ? "bg-white text-black" : "bg-gray-100") : ""}`}
+                  onClick={() => handleFilterChange("sortBy", "oldest")}
+                >
+                  Oldest
+                </Button>
               </div>
             </div>
             

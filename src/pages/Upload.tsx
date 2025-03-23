@@ -44,7 +44,7 @@ const UploadPage = () => {
     { value: "pink", label: "Pink", color: "#ec4899" },
     { value: "black", label: "Black", color: "#171717" },
     { value: "white", label: "White", color: "#f5f5f5" },
-    { value: "brown", label: "Brown", color: "#78532c" },
+    { value: "gray", label: "Gray", color: "#808080" },
   ];
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
