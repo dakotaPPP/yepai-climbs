@@ -143,6 +143,7 @@ const UploadPage = () => {
         .getPublicUrl(fileName);
       
       // Call FastAPI backend for grade prediction
+      console.log(`${config.apiUrl}/api/upload`);
       const predictionResponse = await fetch(`${config.apiUrl}/api/upload`, {
         method: 'POST',
         headers: {
