@@ -11,9 +11,10 @@ export const AccessibilityControls = ({
 }: AccessibilityControlsProps) => {
   const [highContrast, setHighContrast] = useState(false);
 
-  const toggleContrast = () => {
-    setHighContrast(!highContrast);
-    onContrastToggle(!highContrast);
+  const toggleHighContrast = () => {
+    const newValue = !highContrast;
+    setHighContrast(newValue);
+    onContrastToggle(newValue);
   };
 
   return (
@@ -25,7 +26,7 @@ export const AccessibilityControls = ({
         <Button
           variant={highContrast ? "default" : "outline"}
           size="sm"
-          onClick={toggleContrast}
+          onClick={toggleHighContrast}
           className="text-xs py-1 h-8"
         >
           <Contrast className="h-3 w-3 mr-1" />
