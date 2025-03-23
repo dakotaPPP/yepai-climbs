@@ -102,14 +102,20 @@ export const HeroSection = ({ highContrast, scrollToFeatures }: HeroSectionProps
           </div>
           
           <div className={`lg:w-1/2 relative transition-all duration-1000 transform ${showImage ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl animate-float">
-              <div className="absolute inset-0 bg-gradient-to-tr from-yepai-blue/10 to-transparent z-10"/>
-                <img 
-                  src="/demo-image.png" 
-                  alt="Climbing route preview" 
-                  className="w-full h-auto object-cover"
-                />
-              
+            <a 
+              href="https://youtu.be/Z7C-xXhnCwE?si=mAtc2E1r8jLFCPhH" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="cursor-pointer"
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl animate-float">
+                <div className="absolute inset-0 bg-gradient-to-tr from-yepai-blue/10 to-transparent z-10"/>
+                  <img 
+                    src="/demo-image.png" 
+                    alt="Climbing route preview" 
+                    className="w-full h-auto object-cover"
+                  />
+                
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md p-5 rounded-xl shadow-lg flex items-center gap-3 z-20">
                   <div className="h-12 w-12 rounded-full bg-black flex items-center justify-center">
                     <Play className="h-5 w-5 text-white ml-1" />
@@ -118,8 +124,9 @@ export const HeroSection = ({ highContrast, scrollToFeatures }: HeroSectionProps
                     <p className="text-sm font-medium text-gray-500">See how it works</p>
                     <p className="text-base font-bold">Watch the demo</p>
                   </div>
+                </div>
               </div>
-            </div>
+            </a>
             
             <div className="absolute -top-4 -right-4 bg-white p-4 rounded-xl shadow-lg">
               <span className="text-sm font-medium text-gray-500">Predicted Grade</span>
