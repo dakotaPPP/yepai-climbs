@@ -106,15 +106,17 @@ def build_graph(holds, wall_size):
     graph = Data(x=x, edge_index=edge_index)
     return graph
 
-img_path = "Model/Datasets/stonecov1/black_V3-1.jpg"
-target_color = "black"  # or inferred some other way
+def call(img_path, target_color):
 
-holds, wall_size = classify_holds(img_path, target_color)
-graph = build_graph(holds, wall_size)
+    holds, wall_size = classify_holds(img_path, target_color)
+    graph = build_graph(holds, wall_size)
 
-with torch.no_grad():
-    graph.batch = torch.zeros(graph.num_nodes, dtype=torch.long)  # single graph batch
-    output = gnn_model(graph.x, graph.edge_index, graph.batch)
-    prediction = output.argmax(dim=1).item()
+    with torch.no_grad():
+        graph.batch = torch.zeros(graph.num_nodes, dtype=torch.long)  # single graph batch
+        output = gnn_model(graph.x, graph.edge_index, graph.batch)
+        prediction = output.argmax(dim=1).item()
 
-print(f"🧗‍♂️ Predicted Grade: V{prediction}")
+    return(f"V{prediction}")
+
+
+
