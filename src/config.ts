@@ -6,12 +6,11 @@
 // The base URL for the API
 // In production, this will be the Heroku domain
 // In development, this will be localhost
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+export const API_URL = process.env.VITE_API_URL || 'http://localhost:8000';
 
 // Other configuration settings can be added here
 export const config = {
   apiUrl: API_URL,
-  imageStorageUrl: import.meta.env.VITE_IMAGE_STORAGE_URL || 'https://storage.googleapis.com',
   appName: 'YepAI Climbs',
   // ... other configuration options
 };
