@@ -121,10 +121,10 @@ const UploadPage = () => {
       
       // Generate unique file name
       const fileExt = imageFile.name.split('.').pop() || 'jpg';
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+      const fileName = `${user.id}/${Date.now()}-${crypto.randomUUID()}.${fileExt}`;
       
       // Upload to Supabase Storage
-      const { data: uploadData, error: uploadError } = await supabase
+      const { error: uploadError } = await supabase
         .storage
         .from('route_images')
         .upload(fileName, imageData, {
