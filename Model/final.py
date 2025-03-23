@@ -111,12 +111,14 @@ def call(img_path, target_color):
     holds, wall_size = classify_holds(img_path, target_color)
     graph = build_graph(holds, wall_size)
 
-    with torch.no_grad():
-        graph.batch = torch.zeros(graph.num_nodes, dtype=torch.long)  # single graph batch
-        output = gnn_model(graph.x, graph.edge_index, graph.batch)
-        prediction = output.argmax(dim=1).item()
+
+    if graph.edge_index.numel() == 0:
+        return("Not Found")
+    else:
+         with torch.no_grad():
+            graph.batch = torch.zeros(graph.num_nodes, dtype=torch.long)  # single graph batch
+            output = gnn_model(graph.x, graph.edge_index, graph.batch)
+            prediction = output.argmax(dim=1).item()
 
     return(f"V{prediction}")
-
-
 
