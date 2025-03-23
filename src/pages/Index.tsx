@@ -122,11 +122,15 @@ const Index = () => {
             TRUSTED BY CLIMBING GYMS WORLDWIDE
           </p>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60">
-            <div className="h-8 w-24 bg-gray-300 rounded"></div>
-            <div className="h-8 w-32 bg-gray-300 rounded"></div>
-            <div className="h-8 w-28 bg-gray-300 rounded"></div>
-            <div className="h-8 w-24 bg-gray-300 rounded"></div>
-            <div className="h-8 w-32 bg-gray-300 rounded"></div>
+            <div className="h-12 rounded">
+              <img src="/stoneco-logo.png" alt="Climbing gym" className="w-full h-full" />
+            </div>
+            <div className="h-12 rounded">
+              <img src="/momentum-logo.png" alt="Climbing gym" className="w-full h-full" />
+            </div>
+            <div className="h-12 rounded">
+              <img src="/bouldering-project-logo.svg" alt="Climbing gym" className="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </section>
