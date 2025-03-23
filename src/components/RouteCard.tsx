@@ -118,10 +118,10 @@ export const RouteCard = ({
         {/* Corner Ribbon for Grade and Hold Color */}
         <div className="corner-ribbon">
           <div
-            className="corner-ribbon-inner"
+            className={`corner-ribbon-inner ${highContrast ? "bg-white text-black" : ""}`}
             style={{ 
-              backgroundColor: getHoldColorBg(route.hold_color),
-              color: getHoldColorText(route.hold_color)
+              backgroundColor: highContrast ? undefined : getHoldColorBg(route.hold_color),
+              color: highContrast ? undefined : getHoldColorText(route.hold_color)
             }}
           >
             <div className="flex flex-col items-center justify-center">
@@ -138,39 +138,43 @@ export const RouteCard = ({
         </h3>
         
         {route.location && (
-          <p className="text-sm text-gray-500 mb-3 flex items-center">
+          <p className={`text-sm ${highContrast ? "text-white" : "text-gray-500"} mb-3 flex items-center`}>
             <MapPin className="h-3 w-3 mr-1" />
             {route.location}
           </p>
         )}
         
-        <p className="text-xs text-gray-400 mb-4">{formattedDate}</p>
+        <p className={`text-xs ${highContrast ? "text-white" : "text-gray-400"} mb-4`}>{formattedDate}</p>
         
         <div className="flex justify-between items-center">
           <div className="flex space-x-2">
             <Button
-              variant="ghost"
+              variant={highContrast ? "outline" : "ghost"}
               size="sm"
               disabled={isLoading}
               onClick={(e) => handleFeedback("like", e)}
               className={`text-sm rounded-full ${
-                feedback === "like" 
-                  ? "text-green-600 bg-green-50" 
-                  : "text-gray-500 hover:text-green-600 hover:bg-green-50"
+                highContrast
+                  ? "text-white border-white border-2 hover:bg-white hover:text-black"
+                  : feedback === "like" 
+                    ? "text-green-600 bg-green-50" 
+                    : "text-gray-500 hover:text-green-600 hover:bg-green-50"
               }`}
             >
               <ThumbsUp className="h-4 w-4 mr-1" />
             </Button>
             
             <Button
-              variant="ghost"
+              variant={highContrast ? "outline" : "ghost"}
               size="sm"
               disabled={isLoading}
               onClick={(e) => handleFeedback("dislike", e)}
               className={`text-sm rounded-full ${
-                feedback === "dislike" 
-                  ? "text-red-600 bg-red-50" 
-                  : "text-gray-500 hover:text-red-600 hover:bg-red-50"
+                highContrast
+                  ? "text-white border-white border-2 hover:bg-white hover:text-black"
+                  : feedback === "dislike" 
+                    ? "text-red-600 bg-red-50" 
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-50"
               }`}
             >
               <ThumbsDown className="h-4 w-4 mr-1" />
@@ -179,11 +183,15 @@ export const RouteCard = ({
           
           {onDelete && (
             <Button
-              variant="ghost"
+              variant={highContrast ? "outline" : "ghost"}
               size="sm"
               disabled={isLoading}
               onClick={(e) => handleDelete(e)}
-              className="text-sm text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full"
+              className={`text-sm rounded-full ${
+                highContrast
+                  ? "text-white border-white border-2 hover:bg-white hover:text-black"
+                  : "text-gray-400 hover:text-red-600 hover:bg-red-50"
+              }`}
             >
               <Trash2 className="h-4 w-4" />
             </Button>

@@ -166,14 +166,14 @@ const RoutePreview = () => {
   
   return (
     <>
-      <Navbar />
+      <Navbar highContrast={highContrast} />
       <div className={`min-h-screen pt-24 pb-16 px-6 ${highContrast ? "bg-black text-white" : ""}`}>
         <div className="max-w-5xl mx-auto page-transition">
           <div className="flex items-center mb-8">
             <Button
-              variant="ghost"
+              variant={highContrast ? "outline" : "ghost"}
               onClick={() => navigate("/dashboard")}
-              className="text-gray-500 mr-4"
+              className={`${highContrast ? "text-white border-white border-2 hover:bg-white hover:text-black" : "text-gray-500"} mr-4`}
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
               Back to Dashboard
@@ -225,11 +225,15 @@ const RoutePreview = () => {
                       <Button
                         variant={feedback === "like" ? "default" : "outline"}
                         onClick={() => handleFeedback("like")}
-                        className={`${
+                        className={
                           feedback === "like" 
-                            ? "bg-yepai-green text-white" 
-                            : "text-gray-700"
-                        }`}
+                            ? (highContrast 
+                              ? "bg-white text-black border-2 border-black" 
+                              : "bg-yepai-green text-white")
+                            : (highContrast
+                              ? "text-white border-white border-2 hover:bg-white hover:text-black"
+                              : "text-gray-700")
+                        }
                         disabled={isLoading}
                       >
                         <ThumbsUp className="h-5 w-5 mr-2" />
@@ -239,11 +243,15 @@ const RoutePreview = () => {
                       <Button
                         variant={feedback === "dislike" ? "default" : "outline"}
                         onClick={() => handleFeedback("dislike")}
-                        className={`${
+                        className={
                           feedback === "dislike" 
-                            ? "bg-yepai-coral text-white" 
-                            : "text-gray-700"
-                        }`}
+                            ? (highContrast 
+                              ? "bg-white text-black border-2 border-black" 
+                              : "bg-yepai-coral text-white")
+                            : (highContrast
+                              ? "text-white border-white border-2 hover:bg-white hover:text-black"
+                              : "text-gray-700")
+                        }
                         disabled={isLoading}
                       >
                         <ThumbsDown className="h-5 w-5 mr-2" />
@@ -255,7 +263,10 @@ const RoutePreview = () => {
                         <Button
                           variant="outline"
                           onClick={handleDelete}
-                          className="text-yepai-coral border-yepai-coral/30 hover:bg-yepai-coral/10"
+                          className={highContrast 
+                            ? "text-white border-white border-2 hover:bg-white hover:text-black" 
+                            : "text-yepai-coral border-yepai-coral/30 hover:bg-yepai-coral/10"
+                          }
                           disabled={isLoading}
                         >
                           <Trash2 className="h-5 w-5 mr-2" />

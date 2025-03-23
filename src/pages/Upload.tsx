@@ -203,7 +203,7 @@ const UploadPage = () => {
   
   return (
     <>
-      <Navbar />
+      <Navbar highContrast={highContrast} />
       <div className={`min-h-screen pt-24 pb-16 px-6 ${highContrast ? "bg-black text-white" : "bg-white"}`}>
         <div className="max-w-5xl mx-auto">
           <div className="mb-8">
@@ -221,8 +221,12 @@ const UploadPage = () => {
                     <div
                       className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
                         isDragging 
-                          ? "border-yepai-blue bg-yepai-blue/5" 
-                          : "border-gray-300 hover:border-yepai-blue hover:bg-yepai-blue/5"
+                          ? highContrast 
+                            ? "border-gray-300 hover:border-black hover:bg-gray-300/5" 
+                            : "border-yepai-blue bg-yepai-blue/5" 
+                          : highContrast 
+                            ? "border-gray-300 hover:border-black hover:bg-black/5" 
+                            : "border-gray-300 hover:border-yepai-blue hover:bg-yepai-blue/5"
                       }`}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
@@ -244,7 +248,7 @@ const UploadPage = () => {
                         <p className="text-sm text-gray-500 mb-4">
                           or click to browse files (JPEG, PNG)
                         </p>
-                        <Button variant="outline" className="rounded-full">
+                        <Button variant="outline" className={highContrast ? "rounded-full border-2 border-black text-black hover:bg-white hover:text-black" : "rounded-full"}>
                           <Camera className="h-5 w-5 mr-2" />
                           Select Image
                         </Button>
@@ -306,13 +310,26 @@ const UploadPage = () => {
                             variant={holdColor === color.value ? "default" : "outline"}
                             className={`flex items-center justify-center h-10 rounded-lg ${
                               holdColor === color.value 
-                                ? "ring-2 ring-yepai-blue ring-offset-2" 
+                                ? highContrast
+                                  ? "ring-2 ring-white ring-offset-2 ring-offset-black"
+                                  : "ring-2 ring-yepai-blue ring-offset-2"
                                 : ""
                             }`}
                             style={{
-                              backgroundColor: holdColor === color.value ? color.color : "",
-                              color: holdColor === color.value && ["black", "blue", "purple", "green"].includes(color.value) ? "white" : "",
-                              borderColor: color.color,
+                              backgroundColor: highContrast
+                                ? holdColor === color.value ? "black" : "white"
+                                : holdColor === color.value ? color.color : "",
+                              color: highContrast
+                                ? holdColor === color.value ? "white" : "black"
+                                : holdColor === color.value 
+                                  ? color.value === "white" 
+                                    ? "black" 
+                                    : ["black", "blue", "purple", "green"].includes(color.value) 
+                                      ? "white" 
+                                      : ""
+                                  : "",
+                              borderColor: highContrast || color.value === "white" ? "black" : color.color,
+                              borderWidth: highContrast ? "2px" : "",
                             }}
                             onClick={() => setHoldColor(color.value)}
                           >
@@ -327,7 +344,10 @@ const UploadPage = () => {
                     <Button
                       onClick={handleUpload}
                       disabled={!imagePreview || isUploading}
-                      className="w-full rounded-lg bg-black hover:bg-gray-800 text-white py-6"
+                      className={highContrast 
+                        ? "w-full rounded-lg bg-white text-black hover:bg-gray-200 border-2 border-black py-6" 
+                        : "w-full rounded-lg bg-black hover:bg-gray-800 text-white py-6"
+                      }
                     >
                       {isUploading ? (
                         <div className="flex items-center">

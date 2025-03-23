@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,11 +10,19 @@ import { toast } from "@/components/ui/use-toast";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register, isLoading } = useAuth();
+  const { register, isLoading, user } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [highContrast, setHighContrast] = useState(false);
+  
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +55,7 @@ const Register = () => {
   
   return (
     <>
-      <Navbar />
+      <Navbar highContrast={highContrast} />
       <div className="min-h-screen flex items-center justify-center px-6 pt-20 pb-10 page-transition">
         <div className="absolute inset-0 bg-gradient-to-br from-yepai-blue/5 to-yepai-teal/5 -z-10" />
         
@@ -121,7 +128,10 @@ const Register = () => {
             <div className="pt-2">
               <Button
                 type="submit"
-                className="w-full button-primary"
+                className={highContrast 
+                  ? "w-full bg-white text-black border-2 border-black hover:bg-gray-200"
+                  : "w-full button-primary"
+                }
                 disabled={isLoading}
               >
                 {isLoading ? <LoadingSpinner size="sm" /> : "Create Account"}
@@ -135,7 +145,10 @@ const Register = () => {
               <Button
                 variant="link"
                 onClick={() => navigate("/login")}
-                className="text-yepai-blue hover:underline p-0"
+                className={highContrast 
+                  ? "text-white hover:text-gray-200 p-0" 
+                  : "text-yepai-blue hover:underline p-0"
+                }
               >
                 Log in
               </Button>

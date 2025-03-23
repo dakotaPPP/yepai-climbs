@@ -168,13 +168,13 @@ const Dashboard = () => {
   
   return (
     <>
-      <Navbar />
+      <Navbar highContrast={highContrast} />
       <div className={`min-h-screen pt-24 pb-16 px-6 ${highContrast ? "bg-black text-white" : ""}`}>
         <div className="max-w-6xl mx-auto page-transition">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold mb-2">Your Routes</h1>
-              <p className="text-gray-600">
+              <p className={`${highContrast ? "text-white" : "text-gray-600"}`}>
                 Manage and review your climbing routes
               </p>
             </div>
@@ -182,9 +182,9 @@ const Dashboard = () => {
             <div className="mt-4 md:mt-0">
               <Button 
                 onClick={() => navigate("/upload")}
-                className="button-primary flex items-center space-x-2"
+                className={highContrast ? "bg-white text-black hover:bg-gray-200 border border-black" : "button-primary flex items-center space-x-2"}
               >
-                <Plus className="h-5 w-5" />
+                <Plus className="h-5 w-5 mr-2" />
                 <span>Upload New Route</span>
               </Button>
             </div>
@@ -193,10 +193,10 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
             <div className="lg:col-span-3">
               <div className="relative mb-6">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${highContrast ? "text-white" : "text-gray-400"} h-5 w-5`} />
                 <Input
                   placeholder="Search routes by name, location, grade..."
-                  className="pl-10 input-field py-6"
+                  className={`pl-10 ${highContrast ? "bg-black text-white border-white focus:ring-white" : "input-field"} py-6`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -217,17 +217,17 @@ const Dashboard = () => {
               <div className="max-w-sm mx-auto">
                 <h3 className="text-xl font-medium mb-2">No routes found</h3>
                 {searchQuery ? (
-                  <p className="text-gray-600 mb-6">
+                  <p className={`${highContrast ? "text-white" : "text-gray-600"} mb-6`}>
                     No routes match your search criteria. Try a different search term.
                   </p>
                 ) : (
-                  <p className="text-gray-600 mb-6">
+                  <p className={`${highContrast ? "text-black" : "text-gray-600"} mb-6`}>
                     You haven't uploaded any climbing routes yet. Upload your first route to get started.
                   </p>
                 )}
                 <Button 
                   onClick={() => navigate("/upload")}
-                  className="button-primary"
+                  className={highContrast ? "bg-white text-black hover:bg-gray-200 border border-black" : "button-primary"}
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   Upload Your First Route

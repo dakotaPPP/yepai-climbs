@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   ArrowRight, 
   ChevronDown, 
@@ -19,6 +20,8 @@ import {
 const Index = () => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
+  const { user } = useAuth();
+  const [highContrast, setHighContrast] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -33,7 +36,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+      <Navbar highContrast={highContrast} />
 
       {/* Hero Section */}
       <section className="py-24 px-6 relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
@@ -53,21 +56,33 @@ const Index = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-                <Button 
-                  onClick={() => navigate("/register")} 
-                  className="rounded-full bg-black hover:bg-gray-800 text-white px-8 py-6 text-lg"
-                >
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                
-                <Button 
-                  variant="outline"
-                  onClick={() => navigate("/login")}
-                  className="rounded-full border-2 border-gray-300 hover:border-gray-400 bg-transparent text-gray-800 px-8 py-6 text-lg"
-                >
-                  Log In
-                </Button>
+                {user ? (
+                  <Button 
+                    onClick={() => navigate("/dashboard")} 
+                    className={highContrast ? "rounded-full bg-white text-black hover:bg-gray-200 border-2 border-black" : "rounded-full bg-black hover:bg-gray-800 text-white px-8 py-6 text-lg"}
+                  >
+                    Go to Dashboard
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                ) : (
+                  <>
+                    <Button 
+                      onClick={() => navigate("/register")} 
+                      className={highContrast ? "rounded-full bg-white text-black hover:bg-gray-200 border-2 border-black px-8 py-6 text-lg" : "rounded-full bg-black hover:bg-gray-800 text-white px-8 py-6 text-lg"}
+                    >
+                      Get Started
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                    
+                    <Button 
+                      variant="outline"
+                      onClick={() => navigate("/login")}
+                      className={highContrast ? "rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-black px-8 py-6 text-lg" : "rounded-full border-2 border-gray-300 hover:border-gray-400 bg-transparent text-gray-800 px-8 py-6 text-lg"}
+                    >
+                      Log In
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
             
@@ -270,17 +285,34 @@ const Index = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
             Ready to elevate your climbing?
           </h2>
-          <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
-            Join YepAI today and start getting AI-powered insights on your climbing routes.
-          </p>
-          <Button 
-            onClick={() => navigate("/register")}
-            className="rounded-full bg-white text-black hover:bg-gray-100 text-lg py-7 px-10"
-          >
-            Create Your Free Account
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-          <p className="mt-6 text-sm text-gray-400">No credit card required</p>
+          {user ? (
+            <>
+              <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
+                Upload new routes to get AI-powered insights on their difficulty.
+              </p>
+              <Button 
+                onClick={() => navigate("/upload")}
+                className={highContrast ? "rounded-full bg-white text-black hover:bg-gray-200 border-2 border-black text-lg py-7 px-10" : "rounded-full bg-white text-black hover:bg-gray-100 text-lg py-7 px-10"}
+              >
+                Upload a Route
+                <Upload className="ml-2 h-5 w-5" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
+                Join YepAI today and start getting AI-powered insights on your climbing routes.
+              </p>
+              <Button 
+                onClick={() => navigate("/register")}
+                className={highContrast ? "rounded-full bg-white text-black hover:bg-gray-200 border-2 border-black text-lg py-7 px-10" : "rounded-full bg-white text-black hover:bg-gray-100 text-lg py-7 px-10"}
+              >
+                Create Your Free Account
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <p className="mt-6 text-sm text-gray-400">No credit card required</p>
+            </>
+          )}
         </div>
       </section>
 
