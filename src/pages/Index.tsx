@@ -22,9 +22,29 @@ const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { user } = useAuth();
   const [highContrast, setHighContrast] = useState(false);
+  
+  // Animation states
+  const [showAI, setShowAI] = useState(false);
+  const [showRouteGrading, setShowRouteGrading] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  const [showImage, setShowImage] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
+    
+    // Sequence the animations with timeouts
+    const aiTimer = setTimeout(() => setShowAI(true), 500);
+    const routeTimer = setTimeout(() => setShowRouteGrading(true), 1200);
+    const contentTimer = setTimeout(() => setShowContent(true), 1900);
+    const imageTimer = setTimeout(() => setShowImage(true), 2600);
+    
+    // Clean up timers
+    return () => {
+      clearTimeout(aiTimer);
+      clearTimeout(routeTimer);
+      clearTimeout(contentTimer);
+      clearTimeout(imageTimer);
+    };
   }, []);
 
   const scrollToFeatures = () => {
@@ -52,20 +72,25 @@ const Index = () => {
         
         <div className="max-w-6xl mx-auto">
           <div 
-            className={`flex flex-col lg:flex-row items-center justify-between gap-16 transition-opacity duration-1000 ${
+            className={`flex flex-col lg:flex-row items-center justify-between gap-16 ${
               isLoaded ? "opacity-100" : "opacity-0"
             }`}
           >
             <div className="lg:w-1/2 space-y-8 text-center lg:text-left z-10">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-gray-900">
-                AI-Powered Route <span className="bg-clip-text text-transparent bg-gradient-to-r from-yepai-blue to-yepai-teal">Grading</span>
+                <span className={`bg-clip-text text-transparent bg-gradient-to-r from-yepai-blue to-yepai-teal transition-opacity duration-1000 ${showAI ? 'opacity-100' : 'opacity-0'}`}>
+                  AI-Powered
+                </span>{" "}
+                <span className={`transition-opacity duration-1000 ${showRouteGrading ? 'opacity-100' : 'opacity-0'}`}>
+                  Route Grading
+                </span>
               </h1>
               
-              <p className="text-xl text-gray-600 max-w-xl leading-relaxed">
+              <p className={`text-xl text-gray-600 max-w-xl leading-relaxed transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
                 Upload images of climbing routes and get instant difficulty predictions. Perfect for climbers of all levels.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
+              <div className={`flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
                 {user ? (
                   <Button 
                     onClick={() => navigate("/dashboard")} 
@@ -96,7 +121,7 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="lg:w-1/2 relative">
+            <div className={`lg:w-1/2 relative transition-all duration-1000 transform ${showImage ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}>
               <div className="relative rounded-2xl overflow-hidden shadow-2xl animate-float">
                 <div className="absolute inset-0 bg-gradient-to-tr from-yepai-blue/10 to-transparent z-10"/>
                   <img 
