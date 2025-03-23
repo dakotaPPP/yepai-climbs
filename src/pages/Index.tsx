@@ -40,6 +40,16 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="py-24 px-6 relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
+        {/* Decorative climbing wall image */}
+        <div className="absolute top-0 left-0 w-60 md:w-80 lg:w-96 h-auto z-0 opacity-80 transform -translate-x-1/4 -translate-y-1/4 rotate-12">
+          <img 
+            src="/climbing-wall.png" 
+            alt="" 
+            className="w-full h-auto object-contain" 
+            aria-hidden="true"
+          />
+        </div>
+        
         <div className="max-w-6xl mx-auto">
           <div 
             className={`flex flex-col lg:flex-row items-center justify-between gap-16 transition-opacity duration-1000 ${

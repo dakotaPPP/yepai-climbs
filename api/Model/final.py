@@ -2,7 +2,8 @@ from ultralytics import YOLO
 from PIL import Image
 import numpy as np
 import torch
-
+import requests
+import io
 color_model = YOLO("Model/Pytrochfiles/colorbestv1.pt")
 type_model = YOLO("Model/Pytrochfiles/holdsbestv2.pt")
 import torch
@@ -35,8 +36,12 @@ gnn_model.eval()
 
 
 def classify_holds(img_path, target_color):
-    image = Image.open(img_path).convert("RGB")
-    color_result = color_model.predict(img_path)[0]
+    response = requests.get(img_path)
+    response.raise_for_status()  # will raise error if the request fails
+    image = Image.open(io.BytesIO(response.content)).convert("RGB")
+    temp_path = "temp_downloaded_image.jpg"
+    image.save(temp_path)
+    color_result = color_model.predict(temp_path)[0]
 
     holds = []
     for i, box in enumerate(color_result.boxes):
@@ -111,6 +116,8 @@ def call(img_path, target_color):
     holds, wall_size = classify_holds(img_path, target_color)
     graph = build_graph(holds, wall_size)
 
+    if graph.edge_index.numel() == 0:
+        return "Not Found"
     with torch.no_grad():
         graph.batch = torch.zeros(graph.num_nodes, dtype=torch.long)  # single graph batch
         output = gnn_model(graph.x, graph.edge_index, graph.batch)
