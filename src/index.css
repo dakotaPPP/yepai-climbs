@@ -119,3 +119,46 @@
     @apply cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
   }
 }
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.infinite-carousel-track {
+  display: flex;
+  animation: slide 40s linear infinite;
+  width: max-content;
+}
+
+.infinite-carousel-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+.infinite-carousel-container::before,
+.infinite-carousel-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 150px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.infinite-carousel-container::before {
+  left: 0;
+  background: linear-gradient(to right, rgb(249, 250, 251) 20%, rgba(249, 250, 251, 0));
+}
+
+.infinite-carousel-container::after {
+  right: 0;
+  background: linear-gradient(to left, rgb(249, 250, 251) 20%, rgba(249, 250, 251, 0));
+}

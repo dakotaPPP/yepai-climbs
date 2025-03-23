@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -121,15 +120,45 @@ const Index = () => {
           <p className="text-center text-gray-500 text-sm font-medium mb-8">
             TRUSTED BY CLIMBING GYMS WORLDWIDE
           </p>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60">
-            <div className="h-12 rounded">
-              <img src="/stoneco-logo.png" alt="Climbing gym" className="w-full h-full" />
-            </div>
-            <div className="h-12 rounded">
-              <img src="/momentum-logo.png" alt="Climbing gym" className="w-full h-full" />
-            </div>
-            <div className="h-12 rounded">
-              <img src="/bouldering-project-logo.svg" alt="Climbing gym" className="w-full h-full object-cover" />
+          <div className="infinite-carousel-container">
+            <div className="infinite-carousel-track opacity-60">
+              {/* First set of logos */}
+              <div className="flex items-center gap-20 px-10">
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/stoneco-logo.png" alt="Stone Co" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/momentum-logo.png" alt="Momentum" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/bouldering-project-logo.svg" alt="Bouldering Project" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/stoneco-logo.png" alt="Stone Co" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/momentum-logo.png" alt="Momentum" className="h-full object-contain" />
+                </div>
+              </div>
+              
+              {/* Duplicate set of logos for seamless looping */}
+              <div className="flex items-center gap-20 px-10">
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/stoneco-logo.png" alt="Stone Co" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/momentum-logo.png" alt="Momentum" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/bouldering-project-logo.svg" alt="Bouldering Project" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/stoneco-logo.png" alt="Stone Co" className="h-full object-contain" />
+                </div>
+                <div className="h-12 w-auto rounded flex-shrink-0">
+                  <img src="/momentum-logo.png" alt="Momentum" className="h-full object-contain" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
