@@ -208,7 +208,7 @@ const UploadPage = () => {
         <div className="max-w-5xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">Upload New Route</h1>
-            <p className="text-gray-600">
+            <p className={`${highContrast ? "text-white" : "text-gray-600"}`}>
               Upload a photo of a climbing route to get an AI prediction of its difficulty
             </p>
           </div>
@@ -344,10 +344,7 @@ const UploadPage = () => {
                     <Button
                       onClick={handleUpload}
                       disabled={!imagePreview || isUploading}
-                      className={highContrast 
-                        ? "w-full rounded-lg bg-white text-black hover:bg-gray-200 border-2 border-black py-6" 
-                        : "w-full rounded-lg bg-black hover:bg-gray-800 text-white py-6"
-                      }
+                      className={"w-full rounded-lg bg-black hover:bg-gray-800 border-2 border-white text-white py-6"}
                     >
                       {isUploading ? (
                         <div className="flex items-center">
@@ -371,7 +368,7 @@ const UploadPage = () => {
                 
                 <Card className={`p-6 rounded-xl ${highContrast ? "high-contrast" : "bg-gray-50 border border-gray-200"}`}>
                   <div className="flex items-start mb-4">
-                    <AlertTriangle className="h-5 w-5 text-yepai-blue mt-0.5 mr-2 flex-shrink-0" />
+                    <AlertTriangle className={`h-5 w-5 ${highContrast ? "text-black" : "text-yepai-blue"} mt-0.5 mr-2 flex-shrink-0`} />
                     <h3 className="font-medium">Tips for best results</h3>
                   </div>
                   <ul className="text-sm space-y-2 text-gray-700">

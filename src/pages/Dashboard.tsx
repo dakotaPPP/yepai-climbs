@@ -182,7 +182,7 @@ const Dashboard = () => {
             <div className="mt-4 md:mt-0">
               <Button 
                 onClick={() => navigate("/upload")}
-                className={highContrast ? "bg-white text-black hover:bg-gray-200 border border-black" : "button-primary flex items-center space-x-2"}
+                className={highContrast ? "bg-white text-black hover:bg-gray-200 border border-black space-x-2" : "button-primary flex items-center space-x-2"}
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span>Upload New Route</span>
