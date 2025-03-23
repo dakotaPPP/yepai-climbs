@@ -1,3 +1,7 @@
+# Version control
+.git
+.gitignore
+
 # Python cache files
 __pycache__/
 *.py[cod]
@@ -20,18 +24,16 @@ var/
 .installed.cfg
 *.egg
 
-# Environment variables
+# Environments
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Virtual Environment
+.venv
+env/
 venv/
 ENV/
+env.bak/
+venv.bak/
 
-# IDE files
+# IDE specific files
 .idea/
 .vscode/
 *.swp
@@ -41,8 +43,5 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Temp files created by the app
-temp_crop.jpg
-
-# Logs
-*.log
+# Debug logs
+*.log 
