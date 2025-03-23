@@ -250,7 +250,9 @@ const Index = () => {
                 </div>
                 <p className="text-gray-700 mb-6 italic">{testimonial.comment}</p>
                 <div className="flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-gray-300 mr-3"></div>
+                    <div className="h-10 w-10 rounded-full bg-gray-300 mr-3">
+                      <img src={testimonial.image} alt="Profile" className="h-full w-full object-cover rounded-full" />
+                    </div>
                   <div>
                     <p className="font-medium">{testimonial.name}</p>
                     <p className="text-sm text-gray-500">{testimonial.role}</p>
@@ -341,18 +343,21 @@ const steps = [
 const testimonials = [
   {
     comment: "Yepai has completely changed how I approach new routes. The AI grading is surprisingly accurate!",
-    name: "Sarah Johnson",
+    name: "Ryan Velasco",
     role: "Competitive Climber",
+    image: "/ryan.jpg",
   },
   {
-    comment: "As a climbing gym owner, this tool helps us standardize our route difficulties across locations.",
-    name: "Mike Peterson",
-    role: "Gym Owner",
+    comment: "As a route setter, this tool helps me standardize our route difficulties across locations.",
+    name: "Henrik Christensen",
+    role: "Route Setter",
+    image: "/henry.jpg",
   },
   {
     comment: "The app is intuitive and the predictions have been spot on. Great for tracking my progress.",
-    name: "Alex Chen",
+    name: "Gabe Luce",
     role: "Recreational Climber",
+    image: "/gabe.jpg",
   },
 ];
 
