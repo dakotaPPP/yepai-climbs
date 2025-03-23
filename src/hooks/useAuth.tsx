@@ -1,9 +1,9 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 import { User } from '../lib/types';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { deleteCookie, HIGH_CONTRAST_COOKIE, clearUserPreferences } from '@/lib/cookies';
 
 interface AuthContextType {
   user: User | null;
@@ -116,11 +116,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     try {
       setIsLoading(true);
+      
+      // Clear user preferences from local storage if user exists
+      if (user) {
+        clearUserPreferences(user.id);
+      }
+      
       const { error } = await supabase.auth.signOut();
       
       if (error) {
         throw error;
       }
+      
+      // Clear high contrast preference cookie
+      deleteCookie(HIGH_CONTRAST_COOKIE);
+      
+      // Force body class removal
+      document.body.classList.remove('high-contrast');
       
       toast({
         title: "Logged out",

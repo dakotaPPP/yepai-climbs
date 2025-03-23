@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Contrast } from "lucide-react";
+import { useHighContrast } from "@/hooks/useHighContrast";
 
 interface AccessibilityControlsProps {
   onContrastToggle: (highContrast: boolean) => void;
@@ -9,12 +10,13 @@ interface AccessibilityControlsProps {
 export const AccessibilityControls = ({
   onContrastToggle,
 }: AccessibilityControlsProps) => {
-  const [highContrast, setHighContrast] = useState(false);
+  // Use our custom hook which handles cookie persistence
+  const { highContrast, toggleHighContrast } = useHighContrast();
 
-  const toggleContrast = () => {
-    setHighContrast(!highContrast);
-    onContrastToggle(!highContrast);
-  };
+  // Sync parent component with our high contrast state
+  useEffect(() => {
+    onContrastToggle(highContrast);
+  }, [highContrast, onContrastToggle]);
 
   return (
     <div className="flex flex-col space-y-4 p-4 glass-card rounded-lg animate-fadeIn">
@@ -25,7 +27,7 @@ export const AccessibilityControls = ({
         <Button
           variant={highContrast ? "default" : "outline"}
           size="sm"
-          onClick={toggleContrast}
+          onClick={toggleHighContrast}
           className="text-xs py-1 h-8"
         >
           <Contrast className="h-3 w-3 mr-1" />

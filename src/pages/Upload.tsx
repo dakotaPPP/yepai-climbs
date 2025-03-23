@@ -12,6 +12,7 @@ import { HoldColor } from "@/lib/types";
 import { Upload as UploadIcon, Camera, X, Map, AlertTriangle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { config } from '@/config';
 
 const UploadPage = () => {
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ const UploadPage = () => {
         .getPublicUrl(fileName);
       
       // Call FastAPI backend for grade prediction
-      const predictionResponse = await fetch('/api/upload', {
+      const predictionResponse = await fetch(`${config.apiUrl}/api/upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
