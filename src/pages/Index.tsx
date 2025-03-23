@@ -41,7 +41,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="py-24 px-6 relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
         {/* Decorative climbing wall image */}
-        <div className="absolute top-0 left-0 w-60 md:w-80 lg:w-96 h-auto z-0 opacity-80 transform -translate-x-1/4 -translate-y-1/4 rotate-12">
+        <div className="absolute top-0 left-0 h-60px opacity-80 transform -translate-x-1/2 -translate-y-1/4">
           <img 
             src="/climbing-wall.png" 
             alt="" 
@@ -56,7 +56,7 @@ const Index = () => {
               isLoaded ? "opacity-100" : "opacity-0"
             }`}
           >
-            <div className="lg:w-1/2 space-y-8 text-center lg:text-left">
+            <div className="lg:w-1/2 space-y-8 text-center lg:text-left z-10">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-gray-900">
                 AI-Powered Route <span className="bg-clip-text text-transparent bg-gradient-to-r from-yepai-blue to-yepai-teal">Grading</span>
               </h1>
