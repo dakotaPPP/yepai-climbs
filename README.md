@@ -1,4 +1,4 @@
-# YepAI Climbs 🧗‍♂️
+# YepAI Climbs 🧗‍♂️ - 🥇 FIRST PLACE WINNER at TIDAL HACK 🥇
 
 ![YepAI Logo](public/yepai-logo.png)
 
