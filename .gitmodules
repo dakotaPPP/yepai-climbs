@@ -1,0 +1,3 @@
+[submodule "ml-model-and-fastapi"]
+	path = ml-model-and-fastapi
+	url = git@github.com:Yepez1000/Climber-Predictor.git
