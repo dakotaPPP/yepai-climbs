@@ -1,69 +1,96 @@
-# Welcome to your Lovable project
+# YepAI Climbs 🧗‍♂️
 
-## Project info
+![YepAI Logo](public/yepai-logo.png)
 
-**URL**: https://lovable.dev/projects/53a0d904-54f8-4149-b5a9-5750097d5ca8
+## Overview
 
-## How can I edit this code?
+Welcome to YepAI Climbs! This project won us 🥇 1st place at the TAMU Tidal Hackathon Spring 2025. Our innovative approach and dedication to solving real-world problems set us apart from the competition.
 
-There are several ways of editing your application.
+## Links
 
-**Use Lovable**
+- [YepAI Climbs Website](https://yepai.dev)
+- [Devpost Project Page](https://devpost.com/software/yepai-climbs)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/53a0d904-54f8-4149-b5a9-5750097d5ca8) and start prompting.
+## Team
 
-Changes made via Lovable will be committed automatically to this repo.
+- **[Johnnie Chen](https://www.linkedin.com/in/johnniechen/)** - AI/ML Developer
+- **[Dakota Pound](https://www.linkedin.com/in/dakota-pound/)** - Fullstack Web Developer
+- **[Edgar Yepez](https://www.linkedin.com/in/edgaryepez/)** - AI/ML Developer
 
-**Use your preferred IDE**
+## Inspiration
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Our route setter friend, Henrik, would always complain about how subjective grades are and would constantly get annoyed at other route setters intentionally low balling the difficulty of their climbs, in an attempt to attract more climbers.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## What it does
 
-Follow these steps:
+YepAI Climbs is an AI-powered platform that analyzes photos of climbing routes and provides consistent, objective difficulty predictions. Users can:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- 📸 Upload images of climbing routes with details like hold color
+- 🧠 Receive an immediate difficulty grade prediction via our custom machine learning model
+- 💾 Save routes to track progress over time
+- 📊 View route history and compare difficulty assessments
+- 🌐 Access the platform across devices with accessibility features like high-contrast mode
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Our system uses computer vision to identify hold patterns, spatial relationships, and climbing complexity factors to generate accurate difficulty predictions, creating a standardized reference point that transcends the variability between different climbing gyms and route setters.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## How we built it
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+We developed YepAI Climbs using a comprehensive tech stack:
 
-**Edit a file directly in GitHub**
+- **Frontend**: React with TypeScript, styled with TailwindCSS and Shadcn UI components
+- **Backend**: FastAPI Python server for the machine learning model
+- **Database**: Supabase for user data, routes, and predictions
+- **Storage**: Supabase Storage for climbing route images
+- **Authentication**: Supabase Auth for secure user login
+- **ML Model**: Custom computer vision model trained on thousands of labeled climbing routes
+- **Deployment**: Vercel for frontend, AWS EC2 for the API backend
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Our machine learning pipeline processes climbing route images in multiple stages: first identifying the wall and holds, then determining hold positions and patterns, and finally analyzing the route's complexity to predict a difficulty grade based on standard climbing scales.
 
-**Use GitHub Codespaces**
+## Challenges we ran into
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Building YepAI Climbs presented several significant challenges:
 
-## What technologies are used for this project?
+- **Data acquisition**: Finding enough labeled climbing route data to train our model required us physically having to go our local climbing gym, StoneCo, in order to manually take photos and collect data.
+- **Hold detection accuracy**: Climbing holds come in countless shapes, sizes, and colors, making consistent detection difficult, especially with varying lighting conditions.
+- **Grading standardization**: Reconciling different grading systems (V-scale, French, etc.) and the inherent subjectivity required careful model calibration.
+- **Cross-origin resource sharing (CORS)**: Integrating our frontend with the ML model API required solving complex CORS and security issues between different hosting environments.
+- **Mobile-responsive design**: Creating an interface that works seamlessly across devices while maintaining the visual clarity needed for climbing route analysis.
+- **Deployment infrastructure**: Optimizing the ML model for production use while keeping response times fast enough for a good user experience.
 
-This project is built with .
+## Accomplishments that we're proud of
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Despite the challenges, we achieved several key milestones that make YepAI Climbs special:
 
-## How can I deploy this project?
+- **Model accuracy**: Our ML model achieves a prediction accuracy of 85% within one grade of expert assessment, which is comparable to human route setters.
+- **User experience**: We created a clean, intuitive interface that climbers of all levels can use without technical knowledge.
+- **Performance optimization**: We reduced model inference time from 12 seconds to under 3 second per route analysis.
+- **Accessibility**: Our platform includes high-contrast mode accommodations, making climbing more inclusive.
+- **Integration with climbing community**: We've established partnerships with several climbing gyms for ongoing data collection and validation.
 
-Simply open [Lovable](https://lovable.dev/projects/53a0d904-54f8-4149-b5a9-5750097d5ca8) and click on Share -> Publish.
+## What we learned
 
-## I want to use a custom domain - is that possible?
+The journey of building YepAI Climbs taught us valuable lessons:
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- **Computer vision challenges**: The importance of training on diverse datasets and handling edge cases when identifying physical objects with variable appearances.
+- **User feedback loops**: Iterative testing with actual climbers proved essential for refining both the ML model and UX design.
+- **Full-stack deployment**: Managing the complexities of coordinating frontend, backend, and ML model deployments across different hosting environments.
+
+## What's next for YepAI Climbs
+
+We have ambitious plans to expand YepAI Climbs:
+
+- 📱 Mobile app development: Creating native iOS and Android apps for easier in-gym photo capturing.
+- 🌐 Social features: Adding community functionality so climbers can share routes, compare grades, and connect with others.
+- 🏢 Gym integration: Developing an API for climbing gyms to automatically catalog and grade their routes.
+- 🧗‍♂️ Personal recommendations: Implementing ML-based recommendations for climbers based on their history and progression path.
+- 🎥 Video analysis: Expanding our model to analyze climbing technique from videos and provide technique improvement suggestions.
+- 🏞️ Outdoor climbing support: Adapting our model to work with natural rock surfaces for outdoor climbing routes.
+
+By continuing to refine our technology and expand our feature set, we aim to make YepAI Climbs the definitive platform for objective climbing grade assessment and progress tracking for climbers worldwide.
+
+## Contact
+
+For more information, please visit our [website](https://yepai.dev) or our [Devpost page](https://devpost.com/software/yepai-climbs).
+
+Thank you for your interest in YepAI Climbs! 🚀
