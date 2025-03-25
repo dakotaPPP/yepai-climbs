@@ -9,10 +9,18 @@ import { AccessibilityControls } from "@/components/AccessibilityControls";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
 import { HoldColor } from "@/lib/types";
-import { Upload as UploadIcon, Camera, X, Map, AlertTriangle } from "lucide-react";
+import { Upload as UploadIcon, Camera, X, Map, AlertTriangle, AlertCircle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { config } from '@/config';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 const UploadPage = () => {
   const navigate = useNavigate();
@@ -27,6 +35,7 @@ const UploadPage = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
+  const [showServiceDialog, setShowServiceDialog] = useState(true);
   
   useEffect(() => {
     if (!authLoading && !user) {
@@ -112,6 +121,11 @@ const UploadPage = () => {
       return;
     }
     
+    // Show notification that service is unavailable
+    setShowServiceDialog(true);
+    
+    // Uncomment this code when the service is back online
+    /*
     try {
       setIsUploading(true);
       
@@ -199,11 +213,41 @@ const UploadPage = () => {
     } finally {
       setIsUploading(false);
     }
+    */
   };
   
   return (
     <>
       <Navbar highContrast={highContrast} />
+      
+      {/* Service Unavailable Dialog */}
+      <Dialog open={showServiceDialog} onOpenChange={setShowServiceDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-red-500" />
+              Service Unavailable
+            </DialogTitle>
+            <DialogDescription>
+              We regret to inform you that the route uploading functionality is currently unavailable as our AWS backend has run out of credit.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="bg-gray-50 p-4 rounded-md mt-2">
+            <p className="text-sm font-medium mb-2">Want to see test uploads?</p>
+            <p className="text-sm text-gray-600">Login with these credentials:</p>
+            <div className="mt-2 space-y-1 text-sm font-mono bg-white p-2 rounded border">
+              <p><span className="font-semibold">Email:</span> test@example.com</p>
+              <p><span className="font-semibold">Password:</span> test123</p>
+            </div>
+          </div>
+          <DialogFooter className="mt-4">
+            <Button type="button" onClick={() => setShowServiceDialog(false)}>
+              I understand
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
       <div className={`min-h-screen pt-24 pb-16 px-6 ${highContrast ? "bg-black text-white" : "bg-white"}`}>
         <div className="max-w-5xl mx-auto">
           <div className="mb-8">
@@ -352,9 +396,16 @@ const UploadPage = () => {
                           <span>Analyzing route...</span>
                         </div>
                       ) : (
-                        <span>Upload and Predict Grade</span>
+                        <div className="flex items-center space-x-2">
+                          <AlertCircle className="h-5 w-5 text-red-400" />
+                          <span>Service Temporarily Unavailable</span>
+                        </div>
                       )}
                     </Button>
+                    <p className="text-center text-sm text-gray-500 mt-2">
+                      <AlertTriangle className="h-4 w-4 inline-block mr-1 text-amber-500" />
+                      AWS backend credits depleted. Try our test account instead.
+                    </p>
                   </div>
                 </div>
               </Card>
